@@ -255,6 +255,7 @@ Let's take a look at a simple example.
 
 * [EKG.gg styling best practices](./docs/styling/best-practicies.md)
 * [Enter and exiting animations](./docs/styling/enter-and-exit-animations.md)
+* [Learn about OKLCH colors][oklch]
 
 ## Settings - Allowing your users to customize things
 
@@ -636,3 +637,4 @@ from others, preventing any cross-contamination of state or information.
 [ctx]: ./docs/scripting/the-ctx-object.md
 [evergreen]: https://nordvpn.com/cybersecurity/glossary/evergreen-browser/
 [exfiltrate]: https://en.wikipedia.org/wiki/Data_exfiltration
+[oklch]: https://jakub.kr/components/oklch-colors
