@@ -15,12 +15,12 @@ Widgets are comprised of three parts: JS, HTML templating, and CSS styling.
 
 **New to web development?**
 
-Widgets are comprised of three parts: functionality, markup, and styling. The
-functionality is in charge of; given the last state and this new information,
-what should be the new state of the widget? The markup is in charge of; given a
-certain state, what should be the structure of the widget? And finally, the
-styling in charge of; given a certain structure, how should that structure be
-styled to the end users? 
+Widgets are comprised of three parts: functionality, markup, and styling. 
+
+* **Functionality**: Given the previous state and new input, what should the
+  widget's next state be?
+* **Markup**: Given a state, what should the widget's structure be?
+* **Styling**: Given a structure, how should it be presented to users?
 
 > [!NOTE]
 > If this sounds obvious / familiar that is because EKG.gg widgets are very
@@ -245,15 +245,14 @@ Let's take a look at a simple example.
 > Most likely the final browser that will be rendering your widget will be OBS.
 > Most of the time widgets are added to a scene that will then be added as a
 > browser source of OBS. While OBS uses [Chromium][chromium] underneath the
-> hood, they currently use a pretty old version of Chromium. While EKG.gg does
-> not limit what CSS you use, please ensure the CSS you end up writing does not
-> use any features after Chrome 128. If you do they will most likely not work
-> when your users go to use your widget in OBS. Feel free to use a site like
-> [CanIUse][caniuse] to check what is supported where.
+> hood, they currently use a [pretty old version of Chromium][obsversion].
+> While EKG.gg does not limit what CSS you use, please ensure the CSS you end
+> up writing does not use any features after Chrome 127. If you do they will
+> most likely not work when your users go to use your widget in OBS. Feel free
+> to use a site like [CanIUse][caniuse] to check what is supported where.
 
 ### Further Reading
 
-* [EKG.gg styling best practices](./docs/styling/best-practicies.md)
 * [Enter and exiting animations](./docs/styling/enter-and-exit-animations.md)
 * [Learn about OKLCH colors][oklch]
 
@@ -368,7 +367,7 @@ browser][evergreen].
 > [!TIP]
 > While you can develop in any browser you like, as mentioned before,
 > ultimately your widget will often be running in the embed browser inside OBS.
-> Currently that is Chromium version 128. For maximum compatibility you may
+> Currently that is Chromium version 127. For maximum compatibility you may
 > want to consider using Chrome as the browser you choose to develop with.
 
 ### Automatic setup
@@ -638,3 +637,4 @@ from others, preventing any cross-contamination of state or information.
 [evergreen]: https://nordvpn.com/cybersecurity/glossary/evergreen-browser/
 [exfiltrate]: https://en.wikipedia.org/wiki/Data_exfiltration
 [oklch]: https://jakub.kr/components/oklch-colors
+[obsversion]: https://github.com/obsproject/obs-studio/discussions/3853
