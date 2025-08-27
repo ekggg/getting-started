@@ -357,12 +357,11 @@ widget for EKG.gg. The docs are making sense and everything seems so simple to
 the point of being easy. But how do you test things along the way? How can you
 simulate an event being fired and seeing how your widget reacts without having
 to build the whole thing, upload it, and testing it live? That's where the
-EKG.gg public SDK comes in!
+EKG.gg test harness comes in!
 
-Our SDK (Software Development Kit) will enable you to build your widget from
-the comfort of your own PC using whatever code editor you like. Because our SDK
-just uses the web it should work on any OS and any [evergreen
-browser][evergreen]. 
+Our test harness will enable you to build your widget from the comfort of your
+own PC using whatever code editor you like. Because our SDK just uses the web
+it should work on any OS and any [evergreen browser][evergreen]. 
 
 > [!TIP]
 > While you can develop in any browser you like, as mentioned before,
@@ -370,56 +369,38 @@ browser][evergreen].
 > Currently that is Chromium version 127. For maximum compatibility you may
 > want to consider using Chrome as the browser you choose to develop with.
 
-### Automatic setup
+Here the HTML you'll need
 
-This repository itself comes with everything you need to get started with
-development. Replace `[name-of-your-widget]` below and you'll have a working
-directory you can start building your widget from. You will need the ability to
-use `git` and have `npm` installed on your PC. 
-
-```sh
-git clone git@github.com:ekggg/getting-started.git [name-of-your-widget]
-cd [name-of-your-widget]
-rm -rf .git
-npm install
-npm run dev
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EKG Test Harness</title>
+    <!-- Include the SDK -->
+    <script src="https://ekg.gg/test-harness.js" type="module"></script>
+  </head>
+  <body>
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        EKGSDK.loadWidget(
+          '/template.hbs',
+          '/styles.css',
+          '/script.js',
+        );
+      })
+    </script>
+  </body>
+</html>
 ```
 
-Here are the main files you'll be editing:
+Finally you just need a simple web server to serve this HTML and your assets
+and you're good to go!
 
-* `sdk.html` - This is the entry point for the SDK experience. You just need to
-  open up this file in a browser of your choice to get started. You'll rarely
-  need to edit this file.
-* `handler.js` - This is your ECMAScript event handler and state modifier.
-  Modify this file to add functionality to your widget
-* `template.hbs` - This is your widget's markup file. Modify this to change the
-  shape of your widget
-* `styles.css` - This is how your widget will be styled. Modify this to change
-* `manifest.json` - This is your manifest file which you'll be learning more
-  about in the next section. For now all you need to know is that you should
-  modify this to edit your widget's settings.
-
-
-### Manual setup
-
-This is the path you can take if you're a more experienced widget/web
-developer. By going down the manual route you can add your own tooling or asset
-pipeline. What to compile your ECMAScript file from C++ using some crazy
-combination of tools? This is the path you want to go down!
-
-To create your own development setup you'll need at least 5 files. 
-
-1. A `.html` file (or web server) that loads the EKG.gg public SDK via a
-   `<script>` tag and then boots the SDK, pointing it to your other assets
-2. A `.js` file (or pipeline that generates a `.js` file) that contains your
-   widget's functionality
-3. A `.hbs` file (or pipeline that generates a `.hbs` file) that contains your
-   widget's markup
-4. A `.css` file (or pipeline that generates a `.css` file) that contains your
-   widget's styling
-5. A `manifest.json` file (or pipeline that generates a `manifest.json` file)
-   that contains your widget's configuration. This will be further explained in
-   the next section.
+> [!NOTE]
+> This setup is not as optimal as we want it right now. We will eventually be
+> publishing a CLI tool that greatly improve the development experience.
 
 ## Packaging - Getting ready to deploy to EKG.gg
 
@@ -477,11 +458,9 @@ needs. Make sure you include any and all files your widget references.
 **The final zip**
 
 Once you feel good about your source files, settings, assets, and manifest
-file; it's time to wrap them all up into one. If you're using this getting
-started repo, feel free to run `npm run zip-up` and we will automatically create
-a zip file for you. Otherwise feel free to use your own favorite zipping
-software. Just ensure all files referenced in the manifest are located in the
-zip in the referenced locations.
+file; it's time to wrap them all up into one. Feel free to use your own
+favorite zipping software. Just ensure all files referenced in the manifest are
+located in the zip in the referenced locations.
 
 Once you have this final zip file head on over the [EKG.gg][ekg] itself, go to
 the developer portal, and either update an existing widget of yours or create a
