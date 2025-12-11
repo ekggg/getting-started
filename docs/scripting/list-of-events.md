@@ -29,12 +29,21 @@ the author and message content.
 | `platform` | Yes | string | Platform where the event originated ("twitch" or "youtube") |
 | `raw` | Yes | object | Raw event data from the original platform |
 
-**`ekg.message.deleted`** - Triggered when a chat message is deleted by a
+**`ekg.event.deleted`** - Triggered when a chat message is deleted by a
 moderator or the platform.
 
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
-| `deletedMessageId` | Yes | string | ID of the message that was deleted |
+| `deletedEventId` | Yes | string | ID of the event that was deleted |
+| `platform` | Yes | string | Platform where the event originated ("twitch" or "youtube") |
+| `raw` | Yes | object | Raw event data from the original platform |
+
+**`ekg.user.messages_cleared`** - Triggered when a user is banned or timed out,
+indicating that all their messages should be cleared from the chat display.
+
+| Property | Required | Type | Description |
+|----------|----------|------|-------------|
+| `userId` | Yes | string | ID of the user whose messages should be removed |
 | `platform` | Yes | string | Platform where the event originated ("twitch" or "youtube") |
 | `raw` | Yes | object | Raw event data from the original platform |
 
@@ -102,19 +111,6 @@ other users.
 | `followerId` | Yes | string | Unique identifier for the new follower |
 | `followerDisplayName` | Yes | string | Display name of the new follower |
 | `followedAt` | Yes | number | Unix timestamp (seconds) when the follow occurred |
-| `platform` | Yes | string | Platform where the event originated ("twitch" or "youtube") |
-| `raw` | Yes | object | Raw event data from the original platform |
-
-## Moderation Events
-
-**`ekg.user.moderated`** - Triggered when a user is banned or timed out.
-
-| Property | Required | Type | Description |
-|----------|----------|------|-------------|
-| `moderatedUserId` | Yes | string | Unique identifier for the moderated user |
-| `moderatedUserDisplayName` | Yes | string | Display name of the moderated user |
-| `actionType` | Yes | string | Type of moderation action ("ban" or "timeout") |
-| `durationSeconds` | No | number | Duration in seconds (null for permanent bans) |
 | `platform` | Yes | string | Platform where the event originated ("twitch" or "youtube") |
 | `raw` | Yes | object | Raw event data from the original platform |
 

@@ -32,19 +32,19 @@ with one another. We'll start with the most complicated part, functionality.
 
 ## Functionality - How state changes
 
-**Language: ECMAScript**
+**Language: Javascript**
 
 Widgets are often not very useful unless they have the ability to change over
 time and react to outside information. The way EKG.gg enables developers to
 safely get access to this information and change over time is via our state +
-event system. Widget functionality expected to be written in [ECMAScript][ecma]
-(aka Javascript). Let's take a look at a simple example below:
+event system. Widget functionality expected to be written in Javascript. Let's
+take a look at a simple example below:
 
 ```js
 // widget.js
 EKG.registerWidget({
   name: "Counter",
-  initialState: (_ctx) => ({ count: 0 }),
+  initialState: () => ({ count: 0 }),
   handleEvent(event, state, ctx) {
     switch (event.type) {
       case "ekg.chat.sent":
@@ -106,12 +106,10 @@ and runtime. Read more about it [here][ctx].
 > state value is returned.
 
 > [!NOTE]
-> The keen eyed observers may have seen we said that the language required is
-> ECMAScript not _Javascript_. That was not because we're trying avoid getting
-> sued by Oracle. As you'll see in the security section below, our widgets
-> actually run in VM called QuickJS. Many Javascript APIs and globals you may
-> expect in a normal browser environment aren't actually available. Instead
-> your widget should only use core ECMAScript APIs.
+> As you'll see in the security section below, our widgets actually run in VM
+> called QuickJS. Many Javascript APIs and globals you may expect in a normal
+> browser environment aren't actually available. Instead your widget should
+> only use core non-async ECMAScript APIs.
 
 ### Further reading
 
@@ -294,7 +292,7 @@ some example settings.
       "type": "string",
       "description": "Align Messages:",
       "default": "column",
-      "options": {
+      "choices": {
         "column-reverse": "Top",
         "column": "Bottom"
       }
@@ -336,7 +334,7 @@ EKG.registerWidget({
 ```css
 /* In your styles, you can use handlebars to get the settings as well! */
 :root {
-  --primary-color: {{withFallback settings.primaryColor "#ccc"}}
+  --primary-color: {{settings.primaryColor}}
 }
 ```
 
@@ -357,11 +355,11 @@ widget for EKG.gg. The docs are making sense and everything seems so simple to
 the point of being easy. But how do you test things along the way? How can you
 simulate an event being fired and seeing how your widget reacts without having
 to build the whole thing, upload it, and testing it live? That's where the
-EKG.gg test harness comes in!
+EKG.gg devkit comes in!
 
-Our test harness will enable you to build your widget from the comfort of your
-own PC using whatever code editor you like. Because our SDK just uses the web
-it should work on any OS and any [evergreen browser][evergreen]. 
+Our devkit will enable you to build your widget from the comfort of your own PC
+using whatever code editor you like. Because our SDK uses NodeJS + NPM it
+should work on any OS and any [evergreen browser][evergreen]. 
 
 > [!TIP]
 > While you can develop in any browser you like, as mentioned before,
@@ -369,38 +367,15 @@ it should work on any OS and any [evergreen browser][evergreen].
 > Currently that is Chromium version 127. For maximum compatibility you may
 > want to consider using Chrome as the browser you choose to develop with.
 
-Here the HTML you'll need
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EKG Test Harness</title>
-    <!-- Include the SDK -->
-    <script src="https://ekg.gg/test-harness.js" type="module"></script>
-  </head>
-  <body>
-    <script>
-      document.addEventListener("DOMContentLoaded", function (event) {
-        EKGSDK.loadWidget(
-          '/template.hbs',
-          '/styles.css',
-          '/script.js',
-        );
-      })
-    </script>
-  </body>
-</html>
+Here's how you install the devkit and start a new project:
+```
+npm create ekg [folder name]
 ```
 
-Finally you just need a simple web server to serve this HTML and your assets
-and you're good to go!
+You can also use `pnpm` or `bun` instead of `npm`. Once you've created a
+project `cd` in to the new folder, and run `npm run dev`
 
-> [!NOTE]
-> This setup is not as optimal as we want it right now. We will eventually be
-> publishing a CLI tool that greatly improve the development experience.
+Learn more about devkit from it's github page: https://github.com/ekggg/devkit
 
 ## Packaging - Getting ready to deploy to EKG.gg
 
@@ -454,6 +429,11 @@ needs. Make sure you include any and all files your widget references.
 > If you don't list an asset in your manifest file even if it's included in the
 > final `.zip` file, it will not be uploaded to EKG.gg's servers. So make sure
 > to do a full audit!
+
+**Building your assets**
+
+Running `npm run build` inside the devkit will ensure all of your assets are
+built and ready to be uploaded to EKG.gg.
 
 **The final zip**
 
