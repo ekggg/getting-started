@@ -109,7 +109,7 @@ and runtime. Read more about it [here][ctx].
 > As you'll see in the security section below, our widgets actually run in VM
 > called QuickJS. Many Javascript APIs and globals you may expect in a normal
 > browser environment aren't actually available. Instead your widget should
-> only use core non-async ECMAScript APIs.
+> only use core non-async ECMAScript 2023 APIs.
 
 ### Further reading
 
