@@ -1,13 +1,13 @@
 # Scripting best practices
 
 Writing effective event handlers is crucial for creating responsive and
-maintainable widgets. The `handleEvent` function is the heart of your widget's
+maintainable widgets. The `.register()` callback is the heart of your widget's
 functionality, so following these best practices will ensure your widgets
 perform well and are easy to debug.
 
 ## Keep it pure and predictable
 
-Your `handleEvent` function should be a pure function that follows the pattern
+Your `.register()` callback should be a pure function that follows the pattern
 `state + event = newState`. This means the function should not have side
 effects and should always produce the same output given the same inputs. Avoid
 modifying global variables or performing any operations that depend on external
@@ -35,7 +35,7 @@ pattern clear and maintainable.
 
 ## Sometime you need to optimize for performance
 
-Remember that your `handleEvent` function will be called frequently as events
+Remember that your `.register()` callback will be called frequently as events
 stream in. Keep your logic efficient and avoid expensive operations like deep
 array searches or complex calculations on every event. Consider caching
 computed values in your state or only updating specific parts of your state

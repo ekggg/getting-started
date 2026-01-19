@@ -1,6 +1,6 @@
 # List of EKG Events
 
-EKG.gg widgets receive events through the `handleEvent` function that represent
+EKG.gg widgets receive events through the `.register()` callback that represent
 various activities happening in the stream. 
 
 Each event follows a consistent structure with a `type` field that identifies
@@ -133,28 +133,35 @@ _The tick event has no properties_
 ### Usage Examples
 
 ```javascript
-function handleEvent(event, state, ctx) {
-  switch (event.type) {
-    case "RESIZE":
-      // Update widget layout based on new dimensions
-      return {
-        ...state,
-        width: event.data.width,
-        height: event.data.height,
-        showCompactMode: event.data.width < 300
-      };
-      
-    case "TICK":
-      // Remove old messages after 30 seconds
-      const messages = state.messages.filter(msg => 
-        ctx.now - msg.timestamp < 30_000
-      );
-      return { ...state, messages };
-      
-    default:
-      return state;
-  }
-}
+EKG.widget("MyWidget")
+  .initialState((ctx) => ({
+    messages: [],
+    width: ctx.size.width,
+    height: ctx.size.height,
+    showCompactMode: ctx.size.width < 300
+  }))
+  .register((event, state, ctx) => {
+    switch (event.type) {
+      case "RESIZE":
+        // Update widget layout based on new dimensions
+        return {
+          ...state,
+          width: event.data.width,
+          height: event.data.height,
+          showCompactMode: event.data.width < 300
+        };
+
+      case "TICK":
+        // Remove old messages after 30 seconds
+        const messages = state.messages.filter(msg =>
+          ctx.now - msg.timestamp < 30_000
+        );
+        return { ...state, messages };
+
+      default:
+        return state;
+    }
+  });
 ```
 
 > [!NOTE]
@@ -241,13 +248,15 @@ features that aren't directly exposed by EKG's normalized event structure.
 
 **Example usage:**
 ```javascript
-function handleEvent(event) {
+EKG.widget("BadgeWidget").register((event, state, _ctx) => {
   if (event.platform === "twitch" && event.type === "ekg.chat.sent") {
     // Access Twitch-specific badge information
     const badges = event.raw.badges;
     const userColor = event.raw.color;
+    // Use badges and userColor as needed...
   }
-}
+  return state;
+});
 ```
 
 Use the `raw` property sparingly and only when the normalized event properties

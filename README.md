@@ -42,65 +42,63 @@ take a look at a simple example below:
 
 ```js
 // widget.js
-EKG.registerWidget({
-  name: "Counter",
-  initialState: () => ({ count: 0 }),
-  handleEvent(event, state, ctx) {
+EKG.widget("Counter")
+  .initialState(() => ({ count: 0 }))
+  .register((event, state, _ctx) => {
     switch (event.type) {
       case "ekg.chat.sent":
         return { ...state, count: state.count + 1 };
       default:
         return state;
     }
-  }
-});
+  });
 ```
 
 This is a simple widget that just counts up whenever a new chat message is
 sent. This state will later be sent to the markup renderer to be rendered which
 we'll cover later in this document. Let's quickly breakdown this script:
 
-**`EKG.registerWidget`** - EKG is variable in the global namespace that your
+**`EKG.widget(name?)`** - EKG is a variable in the global namespace that your
 widget has access to. The EKG global provides a few helpers, but the most
-important one is the `registerWidget` function. Every widget with functionality
+important one is the `widget` function. Every widget with functionality
 is expected to call this function once which registers your widget into the EKG
 event bus. If you do not call this function your widget will never receive
-events. 
+events. The optional `name` argument is used for debugging purposes and will
+appear in logs and error reporting in the browser.
 
 > [!WARNING]
-> Make sure you only call `registerWidget` _once_. Calling it multiple times in
-> your widget's script will cause an error.
+> Make sure you only call `EKG.widget()...register()` _once_. Calling it multiple
+> times in your widget's script will cause an error.
 
-**`name`**: The name property is used for debugging purposes. This name will be
-used in logs and error reporting in the browser.
+**`.initialState(fn)`**: This is a chainable method that takes a function
+`(ctx, initialData) => state` and returns the first state of your widget. This
+initial state will be used for the first render of the widget and for the
+subsequent `.register()` function call.
 
-**`initialState`**: This is a function that takes a `ctx` object and returns
-the first state of your widget. This initial state will be used for the first
-render of the widget and for the subsequent `handleEvent` function call.
+**`.register(fn)`**: This is the most important part of any widget. This method
+takes a function `(event, state, ctx) => newState` that will be invoked any time
+something happens in the outside world that EKG.gg currently tracks. This could
+be when a chat is sent, a monetary tip is given to the streamer, or even
+something as neat as something being bought from the streamer's Shopify store.
+The register function is a "pure" function that follows the pattern of
+`state + event = newState`. This pattern keeps the logic of your widget very
+simple, makes the function _extremely_ easy to test, and enables very neat
+tricks like "time-travel debugging".
 
-**`handleEvent`**: This is the most important part of any widget. This function
-will be invoked any time something happens in the outside world that EKG.gg
-currently tracks. This could be when a chat is sent, a monetary tip is given to
-the streamer, or even something as neat as something being bought from the
-streamer's Shopify store. `handleEvent` is a "pure" function that follows the
-pattern of `state + event = newState`. This pattern keeps the logic of your
-widget very simple, makes the `handleEvent` function _extremely_ easy to test,
-and enables very neat tricks like "time-travel debugging".
-
-**`ctx`**: This is a object where one can get context about the current widget
+**`ctx`**: This is an object where one can get context about the current widget
 and runtime. Read more about it [here][ctx].
 
 > [!WARNING]
-> `handleEvent` expects a _new_ state to be returned from the handler if the
+> `.register()` expects a _new_ state to be returned from the handler if the
 > state has changed and the widget needs to be rendered again. Meaning if you
 > write something like `state.events.push(newEvent)` and return that state,
 > EKG.gg will _not_ be able to tell that you have updated your state and a
-> rerender will _not_ happen. Instead you should write something like 
+> rerender will _not_ happen. Instead you should write something like
 > `return { ...state, events: state.events.push(newEvent) }` if you would like
-> to trigger a rerender. 
+> to trigger a rerender.
 
 > [!TIP]
-> If the return value of `handleEvent` is a [falsy value][falsy], then the old
+> If the return value of `.register()` is a [falsy value][falsy], then the old
 > state will be retained and a rerender of the widget will _not_ be
 > scheduled. Additionally a rerender will be skipped if the same (by reference)
 > state value is returned.
@@ -114,7 +112,7 @@ and runtime. Read more about it [here][ctx].
 ### Further reading
 
 * [List of EKG events](./docs/scripting/list-of-events.md)
-* [`handleEvent` best practices](./docs/scripting/best-practicies.md)
+* [`.register()` best practices](./docs/scripting/best-practicies.md)
 * [Using the ctx object][ctx]
 * [Dealing with time](./docs/scripting/dealing-with-time.md)
 * [Using Typescript](./docs/scripting/using-typescript.md)
@@ -317,13 +315,13 @@ widget have access to the user's settings. Let's look at all three parts.
 
 ```js
 // In your scripts
-EKG.registerWidget({
-  //...
-  handleEvent: (event, state, ctx) => {
+EKG.widget("MyWidget")
+  .initialState(() => ({ /* ... */ }))
+  .register((event, state, ctx) => {
     // Settings can be found on the `ctx` object
     const settings = ctx.settings;
-  }
-})
+    return state;
+  });
 ```
 
 ```hbs
@@ -476,7 +474,7 @@ could go wrong:
 2. Some badly written CSS (i.e. `* { size: 100em !important; }`) could screw up
    the look of all widgets on the page
 3. A bad actor could try and mess with all widgets in the scene (i.e.
-   `window.EKG.prototype.registerWidget = myEvilFunction`)
+   `window.EKG.widget = myEvilFunction`)
 4. A troll could hot link to an image that during the review looks harmless and
    nice and later during a major stream updates the image to be pr0n
 

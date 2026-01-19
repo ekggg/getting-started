@@ -2,7 +2,7 @@
 
 The context object (`ctx`) is your widget's gateway to information about its
 runtime environment and user configuration. This object is passed to both your
-`initialState` function and every `handleEvent` call, providing essential data
+`.initialState()` function and every `.register()` call, providing essential data
 that your widget needs to function properly.
 
 ## Available properties

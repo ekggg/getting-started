@@ -72,7 +72,7 @@ advances consistently with each event.
 Traditional JavaScript timing functions like `setTimeout` and `setInterval`
 aren't available in the EKG.gg environment for security reasons. Instead,
 design your time-based logic to be event-driven by checking elapsed time
-whenever your `handleEvent` function is called. This pattern actually results
+whenever your `.register()` callback is called. This pattern actually results
 in more efficient widgets since time calculations only happen when events
 occur, rather than continuously running in the background. Consider using
 techniques like storing "next action time" in your state and comparing it
@@ -88,17 +88,19 @@ the `TICK` event, check `ctx.now` against your stored timestamps to determine
 what needs to be cleaned up or updated.
 
 ```javascript
-function handleEvent(event, state, ctx) {
-  switch (event.type) {
-    case "TICK":
-      // Remove messages older than 30 seconds
-      const messages = state.messages.filter(msg => 
-        ctx.now - msg.timestamp < 30_000
-      );
-      return { ...state, messages };
-      
-    default:
-      return state;
-  }
-}
+EKG.widget("TimedMessages")
+  .initialState(() => ({ messages: [] }))
+  .register((event, state, ctx) => {
+    switch (event.type) {
+      case "TICK":
+        // Remove messages older than 30 seconds
+        const messages = state.messages.filter(msg =>
+          ctx.now - msg.timestamp < 30_000
+        );
+        return { ...state, messages };
+
+      default:
+        return state;
+    }
+  });
 ```
