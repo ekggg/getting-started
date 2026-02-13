@@ -44,10 +44,18 @@ your widget chain.
 
 ```js
 EKG.widget("MyWidget")
-  .initialState(() => ({ /* ... */ }))
-  .persist((state) => ({ /* what to save */ }))
-  .restore((state, persisted) => ({ /* how to restore */ }))
-  .register((event, state, ctx) => { /* ... */ });
+  .initialState(() => ({
+    /* ... */
+  }))
+  .persist((state) => ({
+    /* what to save */
+  }))
+  .restore((state, persisted) => ({
+    /* how to restore */
+  }))
+  .register((event, state, ctx) => {
+    /* ... */
+  });
 ```
 
 **`.persist(fn)`** takes your current state and returns an object containing
@@ -135,11 +143,13 @@ doesn't update state, it simply doesn't exist until it's back on screen.
 This has implications for what persistence can and cannot do:
 
 **Persistence helps with:**
+
 - Switching between scenes that both contain your widget
 - Refreshing the browser source
 - Restarting OBS (if the widget was on the active scene before shutdown)
 
 **Persistence cannot help with:**
+
 - Events that happen while your widget isn't on screen
 - Keeping a running tally of things that happen during scenes without your
   widget
@@ -187,12 +197,14 @@ widget never saw.
 A good rule of thumb: persist data, not UI state.
 
 **Good candidates for persistence:**
+
 - Counters and totals
 - Lists of items (recent followers, chat history)
 - User achievements or milestones
 - Configuration derived from events
 
 **Bad candidates for persistence:**
+
 - Animation states (`isAnimating`, `currentFrame`)
 - Temporary flags (`shouldPlaySound`, `hasNewMessage`)
 - Cached calculations that can be recomputed

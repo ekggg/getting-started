@@ -15,17 +15,17 @@ Widgets are comprised of three parts: JS, HTML templating, and CSS styling.
 
 **New to web development?**
 
-Widgets are comprised of three parts: functionality, markup, and styling. 
+Widgets are comprised of three parts: functionality, markup, and styling.
 
-* **Functionality**: Given the previous state and new input, what should the
+- **Functionality**: Given the previous state and new input, what should the
   widget's next state be?
-* **Markup**: Given a state, what should the widget's structure be?
-* **Styling**: Given a structure, how should it be presented to users?
+- **Markup**: Given a state, what should the widget's structure be?
+- **Styling**: Given a structure, how should it be presented to users?
 
 > [!NOTE]
 > If this sounds obvious / familiar that is because EKG.gg widgets are very
 > much modeled after the architecture of the web and use standard web
-> technologies. 
+> technologies.
 
 Let's now dive further into these three parts to see how they work in concert
 with one another. We'll start with the most complicated part, functionality.
@@ -111,12 +111,12 @@ and runtime. Read more about it [here][ctx].
 
 ### Further reading
 
-* [List of EKG events](./docs/scripting/list-of-events.md)
-* [`.register()` best practices](./docs/scripting/best-practicies.md)
-* [Using the ctx object][ctx]
-* [Dealing with time](./docs/scripting/dealing-with-time.md)
-* [Using Typescript](./docs/scripting/using-typescript.md)
-* [Understanding the VM](./docs/scripting/understanding-the-vm.md)
+- [List of EKG events](./docs/scripting/list-of-events.md)
+- [`.register()` best practices](./docs/scripting/best-practicies.md)
+- [Using the ctx object][ctx]
+- [Dealing with time](./docs/scripting/dealing-with-time.md)
+- [Using Typescript](./docs/scripting/using-typescript.md)
+- [Understanding the VM](./docs/scripting/understanding-the-vm.md)
 
 ## Markup - How state is rendered
 
@@ -183,9 +183,9 @@ maintainable UIs with very little code.
 
 ### Further reading
 
-* [Handlebars docs][handlebars]
-* [EKG.gg markup best practices](./docs/templating/best-practicices.md)
-* [List of EKG.gg view helpers](./docs/templating/list-of-helpers.md)
+- [Handlebars docs][handlebars]
+- [EKG.gg markup best practices](./docs/templating/best-practicices.md)
+- [List of EKG.gg view helpers](./docs/templating/list-of-helpers.md)
 
 ## Styling - How the markup looks to users
 
@@ -232,7 +232,7 @@ Let's take a look at a simple example.
   .subtext {
     font-size: 0.8em;
     /* color-mix() */
-    color: color-mix(in oklab, var(--primary-color), black 30%)
+    color: color-mix(in oklab, var(--primary-color), black 30%);
   }
 }
 ```
@@ -249,8 +249,8 @@ Let's take a look at a simple example.
 
 ### Further Reading
 
-* [Enter and exiting animations](./docs/styling/enter-and-exit-animations.md)
-* [Learn about OKLCH colors][oklch]
+- [Enter and exiting animations](./docs/styling/enter-and-exit-animations.md)
+- [Learn about OKLCH colors][oklch]
 
 ## Settings - Allowing your users to customize things
 
@@ -261,7 +261,7 @@ thank you message donos over a certain size get? In any and all of these cases
 you don't want your users to modify the source code of your widget to make
 these changes for themselves. _You_ as the widget creator should be able to
 choose how and what users are able to customize. That's where EKG.gg settings
-come in. 
+come in.
 
 When you create or update your widget you can optionally add a list of settings
 and their schemas. This list will be given to EKG.gg as JSON. Let's look at
@@ -316,7 +316,9 @@ widget have access to the user's settings. Let's look at all three parts.
 ```js
 // In your scripts
 EKG.widget("MyWidget")
-  .initialState(() => ({ /* ... */ }))
+  .initialState(() => ({
+    /* ... */
+  }))
   .register((event, state, ctx) => {
     // Settings can be found on the `ctx` object
     const settings = ctx.settings;
@@ -340,11 +342,11 @@ EKG.widget("MyWidget")
 > Settings can be a blessing and a curse. The more settings you add the more
 > your users can customize your widget to fit their unique needs. But if you
 > add _too_ many settings it can sometimes feel overwhelming for the streamer
-> to configure. Try to see you can strike a nice middle ground. 
+> to configure. Try to see you can strike a nice middle ground.
 
 ### Further reading
 
-* [List of setting types](./docs/settings/list-of-types.md)
+- [List of setting types](./docs/settings/list-of-types.md)
 
 ## Development - How to _not_ build in a vacuum
 
@@ -357,7 +359,7 @@ EKG.gg devkit comes in!
 
 Our devkit will enable you to build your widget from the comfort of your own PC
 using whatever code editor you like. Because our SDK uses NodeJS + NPM it
-should work on any OS and any [evergreen browser][evergreen]. 
+should work on any OS and any [evergreen browser][evergreen].
 
 > [!TIP]
 > While you can develop in any browser you like, as mentioned before,
@@ -366,6 +368,7 @@ should work on any OS and any [evergreen browser][evergreen].
 > want to consider using Chrome as the browser you choose to develop with.
 
 Here's how you install the devkit and start a new project:
+
 ```
 npm create ekg [folder name]
 ```
@@ -442,7 +445,7 @@ located in the zip in the referenced locations.
 
 Once you have this final zip file head on over the [EKG.gg][ekg] itself, go to
 the developer portal, and either update an existing widget of yours or create a
-brand new one. 
+brand new one.
 
 > [!NOTE]
 > For safety reasons EKG.gg staff may not immediately publicly publish your new
@@ -459,7 +462,7 @@ brand new one.
 For those that made it to the bottom of this very large README file, we thank
 you for your dedication and admire your impressive attention span. As your
 reward, you now get to learn about some of the coolest parts of EKG.gg (in our
-opinion); security! 
+opinion); security!
 
 At EKG.gg we take security extremely seriously. If our platform cannot be
 trusted then we have failed as an organization. But those that are possibly

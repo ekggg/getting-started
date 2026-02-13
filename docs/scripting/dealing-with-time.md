@@ -36,7 +36,7 @@ const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
 // Check if something happened within the last hour
 const oneHourMs = 60 * 60 * 1000;
-const isRecent = (ctx.now - eventTimestamp) < oneHourMs;
+const isRecent = ctx.now - eventTimestamp < oneHourMs;
 
 // Format relative time display
 function formatTimeAgo(timestamp, now) {
@@ -44,14 +44,14 @@ function formatTimeAgo(timestamp, now) {
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);
   const diffHours = Math.floor(diffMinutes / 60);
-  
+
   if (diffSeconds < 60) return `${diffSeconds}s ago`;
   if (diffMinutes < 60) return `${diffMinutes}m ago`;
   return `${diffHours}h ago`;
 }
 
 // Schedule something for the future
-const fiveMinutesLater = ctx.now + (5 * 60 * 1000);
+const fiveMinutesLater = ctx.now + 5 * 60 * 1000;
 if (ctx.now >= scheduledTime) {
   // Time to execute the scheduled action
 }
@@ -94,8 +94,8 @@ EKG.widget("TimedMessages")
     switch (event.type) {
       case "TICK":
         // Remove messages older than 30 seconds
-        const messages = state.messages.filter(msg =>
-          ctx.now - msg.timestamp < 30_000
+        const messages = state.messages.filter(
+          (msg) => ctx.now - msg.timestamp < 30_000,
         );
         return { ...state, messages };
 

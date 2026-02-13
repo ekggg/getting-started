@@ -198,18 +198,18 @@ autocomplete setting names as you type.
 
 The `EKG.Event` union includes the following event types:
 
-| Event Type | Interface | Description |
-|------------|-----------|-------------|
-| `ekg.channel.followed` | `ChannelFollowed` | A user followed the channel |
-| `ekg.chat.sent` | `ChatSent` | A chat message was sent |
-| `ekg.event.deleted` | `EventDeleted` | An event was deleted by a moderator |
-| `ekg.subscription.gifted` | `SubscriptionGifted` | A subscription was gifted |
-| `ekg.subscription.renewed` | `SubscriptionRenewed` | A subscription was renewed |
-| `ekg.subscription.started` | `SubscriptionStarted` | A new subscription started |
-| `ekg.tip.sent` | `TipSent` | A monetary tip was sent |
-| `ekg.user.messages_cleared` | `UserMessagesCleared` | A user's messages were cleared |
-| `RESIZE` | `ResizeEvent` | The widget container was resized |
-| `TICK` | `TickEvent` | A periodic tick event for animations |
+| Event Type                  | Interface             | Description                          |
+| --------------------------- | --------------------- | ------------------------------------ |
+| `ekg.channel.followed`      | `ChannelFollowed`     | A user followed the channel          |
+| `ekg.chat.sent`             | `ChatSent`            | A chat message was sent              |
+| `ekg.event.deleted`         | `EventDeleted`        | An event was deleted by a moderator  |
+| `ekg.subscription.gifted`   | `SubscriptionGifted`  | A subscription was gifted            |
+| `ekg.subscription.renewed`  | `SubscriptionRenewed` | A subscription was renewed           |
+| `ekg.subscription.started`  | `SubscriptionStarted` | A new subscription started           |
+| `ekg.tip.sent`              | `TipSent`             | A monetary tip was sent              |
+| `ekg.user.messages_cleared` | `UserMessagesCleared` | A user's messages were cleared       |
+| `RESIZE`                    | `ResizeEvent`         | The widget container was resized     |
+| `TICK`                      | `TickEvent`           | A periodic tick event for animations |
 
 ## Utility functions
 
@@ -232,18 +232,20 @@ links, or mentions. Here's how to work with them:
 
 ```ts
 function processMessage(nodes: EKG.ChatNode[]): string {
-  return nodes.map(node => {
-    switch (node.type) {
-      case "text":
-        return node.text;
-      case "emoji":
-        return node.code;
-      case "mention":
-        return `@${node.mentionedDisplayName}`;
-      case "link":
-        return node.href;
-    }
-  }).join("");
+  return nodes
+    .map((node) => {
+      switch (node.type) {
+        case "text":
+          return node.text;
+        case "emoji":
+          return node.code;
+        case "mention":
+          return `@${node.mentionedDisplayName}`;
+        case "link":
+          return node.href;
+      }
+    })
+    .join("");
 }
 ```
 

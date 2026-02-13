@@ -13,8 +13,9 @@ Use the `{{else}}` block for the false case.
 ```hbs
 {{#eq role "broadcaster"}}💻{{else}}👤{{/eq}}
 ```
-*Input: `role = "broadcaster"` → Output: `💻`*  
-*Input: `role = "viewer"` → Output: `👤`*
+
+_Input: `role = "broadcaster"` → Output: `💻`_  
+_Input: `role = "viewer"` → Output: `👤`_
 
 **`{{#in value option1 option2 ...}}`** - Renders the block if `value` is found
 in the list of options. Useful for checking if a value matches any of several
@@ -23,8 +24,9 @@ possibilities.
 ```hbs
 {{#in userType "mod" "vip" "subscriber"}}⭐{{else}}👤{{/in}}
 ```
-*Input: `userType = "mod"` → Output: `⭐`*  
-*Input: `userType = "viewer"` → Output: `👤`*
+
+_Input: `userType = "mod"` → Output: `⭐`_  
+_Input: `userType = "viewer"` → Output: `👤`_
 
 ## Utility Helpers
 
@@ -34,8 +36,9 @@ Perfect for creating visual indicators based on numeric values.
 ```hbs
 {{#repeat subTier}}❤️{{/repeat}}
 ```
-*Input: `subTier = 3` → Output: `❤️❤️❤️`*  
-*Input: `subTier = 0` → Output: `` (empty)*
+
+_Input: `subTier = 3` → Output: `❤️❤️❤️`_  
+_Input: `subTier = 0` → Output: `` (empty)_
 
 ## Formatting Helpers
 
@@ -46,7 +49,8 @@ Defaults to "short" format.
 ```hbs
 {{formatDate createdAt "medium"}}
 ```
-*Input: `createdAt = 1724686200000` → Output: `Aug 26, 2024`*
+
+_Input: `createdAt = 1724686200000` → Output: `Aug 26, 2024`_
 
 **`{{formatTime date [format]}}`** - Formats times using internationalized
 formatting. Same format options as formatDate but focuses on time display.
@@ -54,7 +58,8 @@ formatting. Same format options as formatDate but focuses on time display.
 ```hbs
 {{formatTime messageTime "short"}}
 ```
-*Input: `messageTime = 1724686200000` → Output: `3:30 PM`*
+
+_Input: `messageTime = 1724686200000` → Output: `3:30 PM`_
 
 **`{{formatAgo date [style]}}`** - Shows relative time (e.g., "2 hours ago").
 Style options are "short", "long", or "narrow".
@@ -70,8 +75,9 @@ locale-appropriate separators. Notation options include "standard",
 ```hbs
 {{formatNumber viewCount "compact"}}
 ```
-*Input: `viewCount = 1234567` → Output: `1.2M`*  
-*Input: `viewCount = 1234` → Output: `1.2K`*
+
+_Input: `viewCount = 1234567` → Output: `1.2M`_  
+_Input: `viewCount = 1234` → Output: `1.2K`_
 
 **`{{formatCurrency amount currency}}`** - Formats monetary amounts with proper
 currency symbols and decimal places. Currency should be a 3-letter code like
@@ -80,8 +86,9 @@ currency symbols and decimal places. Currency should be a 3-letter code like
 ```hbs
 {{formatCurrency donationAmount "USD"}}
 ```
-*Input: `donationAmount = 500, currency = "USD"` → Output: `$5`*
-*Input: `donationAmount = 1000, currency = "BITS"` → Output: `1000 bits`*
+
+_Input: `donationAmount = 500, currency = "USD"` → Output: `$5`_
+_Input: `donationAmount = 1000, currency = "BITS"` → Output: `1000 bits`_
 
 ## Built-in Partials
 
@@ -93,4 +100,5 @@ of chat nodes from your widget state.
 ```hbs
 {{> renderChat message}}
 ```
-*Input: Chat nodes with text, emoji, and mention → Output: `Hello <img data-type="emoji" src="..."/> <span data-type="mention">@streamer</span>!`*
+
+_Input: Chat nodes with text, emoji, and mention → Output: `Hello <img data-type="emoji" src="..."/> <span data-type="mention">@streamer</span>!`_
