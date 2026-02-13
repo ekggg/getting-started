@@ -14,16 +14,6 @@ modifying global variables or performing any operations that depend on external
 state. This predictability makes your widgets extremely easy to test and
 enables powerful debugging features like time-travel debugging.
 
-## Always return new state objects
-
-EKG.gg detects state changes by comparing object references, so you must return
-a new state object when you want to trigger a re-render. Avoid mutating the
-existing state directly with operations like `state.count++` or
-`state.messages.push(newMessage)`. Instead, use the spread operator or other
-immutable update patterns: `return { ...state, count: state.count + 1 }` or
-`return { ...state, messages: [...state.messages, newMessage] }`. This ensures
-your widget will re-render when expected.
-
 ## Handle unknown event types gracefully
 
 Your widget will receive many different event types, and new event types may be

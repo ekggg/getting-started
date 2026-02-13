@@ -170,7 +170,7 @@ settings and assets. Given this manifest:
   },
   "assets": {
     "alertSound": {
-      "type": "sound",
+      "type": "audio",
       "file": "alert.wav"
     }
   }

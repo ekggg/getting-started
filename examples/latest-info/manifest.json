@@ -1,0 +1,48 @@
+{
+  "$schema": "https://ekg.gg/schemas/manifest.json",
+  "name": "Latest Info",
+  "description": "Display a single piece of latest supporter info as text",
+  "version": "0.0.1",
+  "js": "script.ts",
+  "css": "styles.css.hbs",
+  "template": "template.html.hbs",
+  "settings": {
+    "infoType": {
+      "type": "string",
+      "name": "Info to Display",
+      "default": "followerName",
+      "choices": {
+        "followerName": "Latest Follower Name",
+        "subscriberName": "Latest Subscriber Name",
+        "tipperName": "Latest Tipper Name",
+        "tipAmount": "Latest Tip Amount",
+        "giftSubberName": "Latest Gift Subber Name",
+        "giftSubCount": "Latest Gift Sub Count"
+      }
+    },
+    "textColor": {
+      "type": "color",
+      "name": "Text Color",
+      "default": "#ffffff"
+    },
+    "fontSize": {
+      "type": "integer",
+      "name": "Font Size (px)",
+      "default": 24,
+      "min": 12,
+      "max": 72
+    },
+    "fontWeight": {
+      "type": "integer",
+      "name": "Font Weight",
+      "default": 400,
+      "min": 100,
+      "max": 900
+    },
+    "placeholderText": {
+      "type": "string",
+      "name": "Placeholder Text",
+      "default": ""
+    }
+  }
+}

@@ -8,6 +8,9 @@ the event, a `data` field which contains that type's information, a `timestamp`
 field which is a unix timestamp in milliseconds of when the event was fired,
 and an `id` property which is unique to that event.
 
+The only exceptions to this are the `TICK` and `RESIZE` events, which are not
+real events but rather signals to your widget to update its state.
+
 ---
 
 ## Chat Events
@@ -220,7 +223,7 @@ Represents user mentions (e.g., @username).
 ### Usage Recommendation
 
 While you can directly access and modify ChatNode arrays, **we recommend using
-the `{{> renderMessage message}}` Handlebars helper in your templates
+the `{{> renderChat message}}` Handlebars helper in your templates
 instead**. This helper properly renders the rich-text content with appropriate
 styling, emoji images, clickable links, and mention formatting.
 
@@ -253,10 +256,10 @@ features that aren't directly exposed by EKG's normalized event structure.
 
 ```javascript
 EKG.widget("BadgeWidget").register((event, state, _ctx) => {
-  if (event.platform === "twitch" && event.type === "ekg.chat.sent") {
+  if (event.data.platform === "twitch" && event.type === "ekg.chat.sent") {
     // Access Twitch-specific badge information
-    const badges = event.raw.badges;
-    const userColor = event.raw.color;
+    const badges = event.data.raw.badges;
+    const userColor = event.data.raw.color;
     // Use badges and userColor as needed...
   }
   return state;

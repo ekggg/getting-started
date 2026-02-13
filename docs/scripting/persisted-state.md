@@ -23,10 +23,17 @@ EKG.widget("SubMilestones")
       const newMilestones = [...state.milestones];
 
       if (newTotal % 100 === 0) {
-        newMilestones.push({ count: newTotal, reachedAt: ctx.now });
+        newMilestones.push({
+          count: newTotal,
+          reachedAt: ctx.now,
+        });
       }
 
-      return { ...state, totalSubs: newTotal, milestones: newMilestones };
+      return {
+        ...state,
+        totalSubs: newTotal,
+        milestones: newMilestones,
+      };
     }
     return state;
   });
@@ -96,7 +103,10 @@ EKG.widget("SubMilestones")
       const newMilestones = [...state.milestones];
 
       if (newTotal % 100 === 0) {
-        newMilestones.push({ count: newTotal, reachedAt: ctx.now });
+        newMilestones.push({
+          count: newTotal,
+          reachedAt: ctx.now,
+        });
       }
 
       return {

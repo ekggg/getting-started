@@ -1,0 +1,5 @@
+<div class="latest-info">
+  {{#eq type "text"}}{{text}}{{/eq}}
+  {{#eq type "number"}}{{formatNumber value}}{{/eq}}
+  {{#eq type "currency"}}{{formatCurrency value currency}}{{/eq}}
+</div>

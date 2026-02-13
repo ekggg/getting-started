@@ -1,0 +1,164 @@
+:root {
+  --bg-color: {{settings.backgroundColor}};
+  --text-color: {{settings.textColor}};
+  --accent-color: {{settings.accentColor}};
+  --follower-color: {{settings.followerColor}};
+  --subscriber-color: {{settings.subscriberColor}};
+  --tip-color: {{settings.tipColor}};
+  --gift-color: {{settings.giftColor}};
+  --font-size: {{settings.fontSize}}px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.latest-supporters {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-color);
+  border-radius: 12px;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-size: var(--font-size);
+  color: var(--text-color);
+}
+
+.latest-supporters.vertical {
+  flex-direction: column;
+}
+
+.latest-supporters.horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.supporter-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-color);
+}
+
+.supporter-item.animating {
+  animation: popIn 500ms ease-out;
+}
+
+.horizontal .supporter-item {
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+
+.supporter-item.follower {
+  border-left-color: var(--follower-color);
+}
+
+.supporter-item.subscriber {
+  border-left-color: var(--subscriber-color);
+}
+
+.supporter-item.tip {
+  border-left-color: var(--tip-color);
+}
+
+.supporter-item.gift {
+  border-left-color: var(--gift-color);
+}
+
+.supporter-item.resub {
+  border-left-color: var(--subscriber-color);
+}
+
+.supporter-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.supporter-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.follower .supporter-icon {
+  background: color-mix(in srgb, var(--follower-color) 20%, transparent);
+  color: var(--follower-color);
+}
+
+.subscriber .supporter-icon {
+  background: color-mix(in srgb, var(--subscriber-color) 20%, transparent);
+  color: var(--subscriber-color);
+}
+
+.tip .supporter-icon {
+  background: color-mix(in srgb, var(--tip-color) 20%, transparent);
+  color: var(--tip-color);
+}
+
+.gift .supporter-icon {
+  background: color-mix(in srgb, var(--gift-color) 20%, transparent);
+  color: var(--gift-color);
+}
+
+.resub .supporter-icon {
+  background: color-mix(in srgb, var(--subscriber-color) 20%, transparent);
+  color: var(--subscriber-color);
+}
+
+.supporter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.supporter-label {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.supporter-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.supporter-detail {
+  font-size: 0.85em;
+  opacity: 0.8;
+  color: var(--accent-color);
+}
+
+.no-supporters {
+  text-align: center;
+  padding: 24px;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  30% {
+    transform: scale(1.03);
+    background: rgba(255, 255, 255, 0.15);
+  }
+  100% {
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}

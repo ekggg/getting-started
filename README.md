@@ -68,7 +68,7 @@ appear in logs and error reporting in the browser.
 
 > [!WARNING]
 > Make sure you only call `EKG.widget()...register()` _once_. Calling it multiple
-> times in your widget's script will cause an error.
+> times in your widget's script will overwrite the previous registration, which can be confusing.
 
 **`.initialState(fn)`**: This is a chainable method that takes a function
 `(ctx, initialData) => state` and returns the first state of your widget. This
@@ -88,20 +88,10 @@ tricks like "time-travel debugging".
 **`ctx`**: This is an object where one can get context about the current widget
 and runtime. Read more about it [here][ctx].
 
-> [!WARNING]
-> `.register()` expects a _new_ state to be returned from the handler if the
-> state has changed and the widget needs to be rendered again. Meaning if you
-> write something like `state.events.push(newEvent)` and return that state,
-> EKG.gg will _not_ be able to tell that you have updated your state and a
-> rerender will _not_ happen. Instead you should write something like
-> `return { ...state, events: state.events.push(newEvent) }` if you would like
-> to trigger a rerender.
-
 > [!TIP]
 > If the return value of `.register()` is a [falsy value][falsy], then the old
 > state will be retained and a rerender of the widget will _not_ be
-> scheduled. Additionally a rerender will be skipped if the same (by reference)
-> state value is returned.
+> scheduled.
 
 > [!NOTE]
 > As you'll see in the security section below, our widgets actually run in VM
@@ -342,7 +332,7 @@ EKG.widget("MyWidget")
 > Settings can be a blessing and a curse. The more settings you add the more
 > your users can customize your widget to fit their unique needs. But if you
 > add _too_ many settings it can sometimes feel overwhelming for the streamer
-> to configure. Try to see you can strike a nice middle ground.
+> to configure. Try to see if you can strike a nice middle ground.
 
 ### Further reading
 
@@ -370,7 +360,7 @@ should work on any OS and any [evergreen browser][evergreen].
 Here's how you install the devkit and start a new project:
 
 ```
-npm create ekg [folder name]
+npm create ekg@latest [folder name]
 ```
 
 You can also use `pnpm` or `bun` instead of `npm`. Once you've created a
@@ -385,10 +375,10 @@ works great. We're so excited for this next step for you, having your widget go
 live! For us to list your widget on the EKG.gg widget marketplace we'll need
 you to upload said widget to us. This includes all of the widget's source
 files, it's manifest file, and all related other assets your widget needs
-(images, sounds, etc).
+(images, audio, etc).
 
 To do this, EKG.gg requires two things. A `manifest.json` file fully filled out
-and a `.zip` file containing everything, including said manifest file.
+and a folder containing everything, including said manifest file.
 
 **`manifest.json`**
 
@@ -416,34 +406,33 @@ example.
       "file": "bg.png"
     },
     "large-dono-alarm": {
-      "type": "sound",
+      "type": "audio",
       "file": "kaboom.wav"
     }
   }
 }
 ```
 
-The manifest lists our all of the files and settings the widget ultimately
+The manifest lists all of the files and settings the widget ultimately
 needs. Make sure you include any and all files your widget references.
 
 > [!WARNING]
 > If you don't list an asset in your manifest file even if it's included in the
-> final `.zip` file, it will not be uploaded to EKG.gg's servers. So make sure
+> final folder, it will not be uploaded to EKG.gg's servers. So make sure
 > to do a full audit!
 
 **Building your assets**
 
-Running `npm run build` inside the devkit will ensure all of your assets are
-built and ready to be uploaded to EKG.gg.
+Running `npm run build` with the devkit will ensure all of your assets are
+built into a folder called `dist` and ready to be uploaded to EKG.gg.
 
-**The final zip**
+**The final folder**
 
 Once you feel good about your source files, settings, assets, and manifest
-file; it's time to wrap them all up into one. Feel free to use your own
-favorite zipping software. Just ensure all files referenced in the manifest are
-located in the zip in the referenced locations.
+file; it's time to wrap them all up into one. Just ensure all files referenced in the manifest are
+located in the folder in the referenced locations. If you use the devkit, it will validate this for you.
 
-Once you have this final zip file head on over the [EKG.gg][ekg] itself, go to
+Once you have this final folder head on over the [EKG.gg][ekg] itself, go to
 the developer portal, and either update an existing widget of yours or create a
 brand new one.
 
@@ -479,7 +468,7 @@ could go wrong:
 3. A bad actor could try and mess with all widgets in the scene (i.e.
    `window.EKG.widget = myEvilFunction`)
 4. A troll could hot link to an image that during the review looks harmless and
-   nice and later during a major stream updates the image to be pr0n
+   nice and later during a major stream updates the image to be a bannable offense.
 
 While none of these would have been EKG.gg's _fault per se_, we don't think
 our job is done until none of these are possible. Streamers and widget
