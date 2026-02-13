@@ -41,3 +41,11 @@ effects. Consider that streamers may have many widgets active simultaneously,
 so overly long or distracting animations can become overwhelming. Test your
 animations at different speeds and consider providing settings to let streamers
 adjust animation duration or disable them entirely for accessibility reasons.
+
+## Runtime hooks that make this easier
+
+For production-grade enter/exit behavior, use runtime features described in
+`./runtime-css-features.md`:
+
+- `ekg-removed` attribute for transition-aware removal
+- `ekg-size` attribute for width/height CSS variables

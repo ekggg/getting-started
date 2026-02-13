@@ -1,104 +1,105 @@
 # List of EKG.gg View Helpers
 
-EKG.gg provides several built-in Handlebars helpers to make building widget
-templates easier and more powerful. These helpers are automatically available
-in all widget templates and handle common tasks like conditional rendering,
-loops, and formatting.
+EKG.gg widgets use Handlebars templates with built-in helpers and partials.
 
-## Conditional Helpers
+## Template context
 
-**`{{#eq a b}}`** - Renders the block if `a` equals `b` (using loose equality).
-Use the `{{else}}` block for the false case.
+Every render receives:
 
-```hbs
-{{#eq role "broadcaster"}}💻{{else}}👤{{/eq}}
-```
+- widget `state`
+- `settings`
+- `assets`
 
-_Input: `role = "broadcaster"` → Output: `💻`_  
-_Input: `role = "viewer"` → Output: `👤`_
+So you can do both `{{count}}` and `{{settings.theme}}` in the same template.
 
-**`{{#in value option1 option2 ...}}`** - Renders the block if `value` is found
-in the list of options. Useful for checking if a value matches any of several
-possibilities.
+## Conditional helpers
 
-```hbs
-{{#in userType "mod" "vip" "subscriber"}}⭐{{else}}👤{{/in}}
-```
+### `{{#eq a b}}...{{else}}...{{/eq}}`
 
-_Input: `userType = "mod"` → Output: `⭐`_  
-_Input: `userType = "viewer"` → Output: `👤`_
+Renders the block when `a == b` (loose equality).
 
-## Utility Helpers
+### `{{#in value option1 option2 ...}}...{{else}}...{{/in}}`
 
-**`{{#repeat count}}`** - Repeats the enclosed block `count` number of times.
-Perfect for creating visual indicators based on numeric values.
+Renders the block when `value` appears in the provided options.
 
-```hbs
-{{#repeat subTier}}❤️{{/repeat}}
-```
+## Utility helpers
 
-_Input: `subTier = 3` → Output: `❤️❤️❤️`_  
-_Input: `subTier = 0` → Output: `` (empty)_
+### `{{#repeat count}}...{{/repeat}}`
 
-## Formatting Helpers
+Repeats the block `count` times.
 
-**`{{formatDate date [format]}}`** - Formats dates using internationalized
-formatting. Format options include "short", "medium", "long", and "full".
-Defaults to "short" format.
+### `{{concat a b c ...}}`
 
-```hbs
-{{formatDate createdAt "medium"}}
-```
+Concatenates values into one string.
 
-_Input: `createdAt = 1724686200000` → Output: `Aug 26, 2024`_
+### `{{toJSON value}}`
 
-**`{{formatTime date [format]}}`** - Formats times using internationalized
-formatting. Same format options as formatDate but focuses on time display.
+Pretty-prints JSON (2-space indentation). Useful for debugging in devkit.
 
-```hbs
-{{formatTime messageTime "short"}}
-```
+## Formatting helpers
 
-_Input: `messageTime = 1724686200000` → Output: `3:30 PM`_
+Formatting uses locale-aware Intl formatters.
 
-**`{{formatAgo date [style]}}`** - Shows relative time (e.g., "2 hours ago").
-Style options are "short", "long", or "narrow".
+Locale source:
 
-```hbs
-{{formatAgo messageTime "short"}}
-```
+- `settings.locale` when it exists and is a string
+- otherwise `navigator.language`
 
-**`{{formatNumber number [notation]}}`** - Formats numbers with
-locale-appropriate separators. Notation options include "standard",
-"scientific", "engineering", and "compact".
+### `{{formatDate date [style]}}`
 
-```hbs
-{{formatNumber viewCount "compact"}}
-```
+Date formatter. `style`: `short` (default), `medium`, `long`, `full`.
 
-_Input: `viewCount = 1234567` → Output: `1.2M`_  
-_Input: `viewCount = 1234` → Output: `1.2K`_
+### `{{formatTime date [style]}}`
 
-**`{{formatCurrency amount currency}}`** - Formats monetary amounts with proper
-currency symbols and decimal places. Currency should be a 3-letter code like
-"USD" or "EUR". Also has special handling for "BITS" currency.
+Time formatter. `style`: `short` (default), `medium`, `long`, `full`.
 
-```hbs
-{{formatCurrency donationAmount "USD"}}
-```
+### `{{formatAgo date [style]}}`
 
-_Input: `donationAmount = 500, currency = "USD"` → Output: `$5`_
-_Input: `donationAmount = 1000, currency = "BITS"` → Output: `1000 bits`_
+Relative formatter. `style`: `short` (default), `long`, `narrow`.
 
-## Built-in Partials
+### `{{formatNumber number [notation]}}`
 
-**`{{> renderChat chatNodes}}`** - Renders chat message content with proper
-handling for emojis, mentions, links, and text. This partial automatically
-handles escaping and styling for all supported chat node types. Pass an array
-of chat nodes from your widget state.
+Number formatter. `notation`: `standard` (default), `scientific`,
+`engineering`, `compact`.
+
+### `{{formatCurrency amount currency}}`
+
+Formats monetary amounts.
+
+- `amount` should be integer minor units from events (ex: cents)
+- `currency` should be a 3-letter code (ex: `USD`)
+- `BITS` has special rendering: `N bits`
+
+## Built-in partials
+
+### `{{> renderChat chatNodes}}`
+
+Renders chat nodes (`text`, `emoji`, `mention`, `link`) safely.
+
+Rendered nodes include useful attributes:
+
+- links: `data-type="link"`
+- emoji: `data-type="emoji"`, `data-emojiid="..."`
+- mention: `data-type="mention"`, `data-userid="..."`
+
+### `{{> playAudio audio}}`
+
+Renders a hidden `<audio>` element.
+
+Expected shape:
 
 ```hbs
-{{> renderChat message}}
+{{! Given state.audio = { src: assets.alert, loop: false, volume: 80 } }}
+{{> playAudio audio}}
 ```
 
-_Input: Chat nodes with text, emoji, and mention → Output: `Hello <img data-type="emoji" src="..."/> <span data-type="mention">@streamer</span>!`_
+Supported fields:
+
+- `src` (required)
+- `loop` (optional)
+- `volume` (optional 0-100)
+
+## Notes
+
+- EKG wraps rendered template output in a root `<div>` internally.
+- CSS files are also Handlebars templates and can read `settings` and `assets`.

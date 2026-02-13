@@ -277,3 +277,4 @@ empty string.
 - [Using the ctx object](./the-ctx-object.md)
 - [Scripting best practices](./best-practicies.md)
 - [List of EKG events](./list-of-events.md)
+- [Widget runtime lifecycle](./runtime-lifecycle.md)

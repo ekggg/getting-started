@@ -105,6 +105,7 @@ and runtime. Read more about it [here][ctx].
 - [`.register()` best practices](./docs/scripting/best-practicies.md)
 - [Using the ctx object][ctx]
 - [Dealing with time](./docs/scripting/dealing-with-time.md)
+- [Widget runtime lifecycle](./docs/scripting/runtime-lifecycle.md)
 - [Using Typescript](./docs/scripting/using-typescript.md)
 - [Understanding the VM](./docs/scripting/understanding-the-vm.md)
 
@@ -240,6 +241,7 @@ Let's take a look at a simple example.
 ### Further Reading
 
 - [Enter and exiting animations](./docs/styling/enter-and-exit-animations.md)
+- [Runtime CSS features](./docs/styling/runtime-css-features.md)
 - [Learn about OKLCH colors][oklch]
 
 ## Settings - Allowing your users to customize things
