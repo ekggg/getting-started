@@ -15,30 +15,29 @@ Widgets are comprised of three parts: JS, HTML templating, and CSS styling.
 
 **New to web development?**
 
-Widgets are comprised of three parts: functionality, markup, and styling. 
+Widgets are comprised of three parts: functionality, markup, and styling.
 
-* **Functionality**: Given the previous state and new input, what should the
+- **Functionality**: Given the previous state and new input, what should the
   widget's next state be?
-* **Markup**: Given a state, what should the widget's structure be?
-* **Styling**: Given a structure, how should it be presented to users?
+- **Markup**: Given a state, what should the widget's structure be?
+- **Styling**: Given a structure, how should it be presented to users?
 
-> [!NOTE]
-> If this sounds obvious / familiar that is because EKG.gg widgets are very
-> much modeled after the architecture of the web and use standard web
-> technologies. 
+> [!NOTE]  
+> If this sounds obvious / familiar that is because EKG.gg widgets are very much
+> modeled after the architecture of the web and use standard web technologies.
 
 Let's now dive further into these three parts to see how they work in concert
 with one another. We'll start with the most complicated part, functionality.
 
 ## Functionality - How state changes
 
-**Language: Javascript**
+**Language: JavaScript**
 
 Widgets are often not very useful unless they have the ability to change over
 time and react to outside information. The way EKG.gg enables developers to
 safely get access to this information and change over time is via our state +
-event system. Widget functionality expected to be written in Javascript. Let's
-take a look at a simple example below:
+event system. Widget functionality is expected to be written in JavaScript.
+Let's take a look at a simple example below:
 
 ```js
 // widget.js
@@ -54,21 +53,22 @@ EKG.widget("Counter")
   });
 ```
 
-This is a simple widget that just counts up whenever a new chat message is
-sent. This state will later be sent to the markup renderer to be rendered which
-we'll cover later in this document. Let's quickly breakdown this script:
+This is a simple widget that just counts up whenever a new chat message is sent.
+This state will later be sent to the markup renderer to be rendered which we'll
+cover later in this document. Let's quickly break down this script:
 
 **`EKG.widget(name?)`** - EKG is a variable in the global namespace that your
 widget has access to. The EKG global provides a few helpers, but the most
-important one is the `widget` function. Every widget with functionality
-is expected to call this function once which registers your widget into the EKG
+important one is the `widget` function. Every widget with functionality is
+expected to call this function once which registers your widget into the EKG
 event bus. If you do not call this function your widget will never receive
 events. The optional `name` argument is used for debugging purposes and will
 appear in logs and error reporting in the browser.
 
-> [!WARNING]
-> Make sure you only call `EKG.widget()...register()` _once_. Calling it multiple
-> times in your widget's script will cause an error.
+> [!WARNING]  
+> Make sure you only call `EKG.widget()...register()` _once_. Calling it
+> multiple times in your widget's script will overwrite the previous
+> registration, which can be confusing.
 
 **`.initialState(fn)`**: This is a chainable method that takes a function
 `(ctx, initialData) => state` and returns the first state of your widget. This
@@ -88,35 +88,24 @@ tricks like "time-travel debugging".
 **`ctx`**: This is an object where one can get context about the current widget
 and runtime. Read more about it [here][ctx].
 
-> [!WARNING]
-> `.register()` expects a _new_ state to be returned from the handler if the
-> state has changed and the widget needs to be rendered again. Meaning if you
-> write something like `state.events.push(newEvent)` and return that state,
-> EKG.gg will _not_ be able to tell that you have updated your state and a
-> rerender will _not_ happen. Instead you should write something like
-> `return { ...state, events: state.events.push(newEvent) }` if you would like
-> to trigger a rerender.
-
-> [!TIP]
+> [!TIP]  
 > If the return value of `.register()` is a [falsy value][falsy], then the old
-> state will be retained and a rerender of the widget will _not_ be
-> scheduled. Additionally a rerender will be skipped if the same (by reference)
-> state value is returned.
+> state will be retained and a rerender of the widget will _not_ be scheduled.
 
-> [!NOTE]
-> As you'll see in the security section below, our widgets actually run in VM
-> called QuickJS. Many Javascript APIs and globals you may expect in a normal
-> browser environment aren't actually available. Instead your widget should
-> only use core non-async ECMAScript 2023 APIs.
+> [!NOTE]  
+> As you'll see in the security section below, our widgets actually run in a VM
+> called QuickJS. Many JavaScript APIs and globals you may expect in a normal
+> browser environment aren't actually available. Instead your widget should only
+> use core non-async ECMAScript 2023 APIs.
 
 ### Further reading
 
-* [List of EKG events](./docs/scripting/list-of-events.md)
-* [`.register()` best practices](./docs/scripting/best-practicies.md)
-* [Using the ctx object][ctx]
-* [Dealing with time](./docs/scripting/dealing-with-time.md)
-* [Using Typescript](./docs/scripting/using-typescript.md)
-* [Understanding the VM](./docs/scripting/understanding-the-vm.md)
+- [List of EKG events](./docs/scripting/list-of-events.md)
+- [`.register()` best practices](./docs/scripting/best-practices.md)
+- [Using the ctx object][ctx]
+- [Dealing with time](./docs/scripting/dealing-with-time.md)
+- [Using TypeScript](./docs/scripting/using-typescript.md)
+- [Understanding the VM](./docs/scripting/understanding-the-vm.md)
 
 ## Markup - How state is rendered
 
@@ -133,14 +122,14 @@ template that renders HTML to be provided. Let's take a look at one now!
 </div>
 ```
 
-Continuing with our chat counter from above this is an extremely simple
-template that will show an incrementing integer every time a new chat is sent.
-With handlebars anything between `{{` and `}}` is considered a dynamic value
-and will attempt to read that expression from the state object. Additionally
-EKG.gg provides a series a view/block helpers to the Handlebars execution
-context to make writing more complex renderings easier. Let's take a look at a
-more complicated example that uses some of these view helpers to build a live
-chat renderer.
+Continuing with our chat counter from above this is an extremely simple template
+that will show an incrementing integer every time a new chat is sent. With
+handlebars anything between `{{` and `}}` is considered a dynamic value and will
+attempt to read that expression from the state object. Additionally EKG.gg
+provides a series of view/block helpers to the Handlebars execution context to
+make writing more complex renderings easier. Let's take a look at a more
+complicated example that uses some of these view helpers to build a live chat
+renderer.
 
 ```hbs
 {{! An inline partial that can be later used }}
@@ -151,7 +140,7 @@ chat renderer.
     <div class="badge">
       {{! Provided block helper for repeating a block X times }}
       {{#repeat subTier}}❤️{{/repeat}}
-      {{! Provided block helper rending a block only if something equals something else }}
+      {{! Provided block helper rendering a block only if something equals something else }}
       {{#eq role "broadcaster"}}💻{{/eq}}
     </div>
     <div class="message">
@@ -174,22 +163,22 @@ chat renderer.
 With this technique you can see you can build sophisticated, powerful, but very
 maintainable UIs with very little code.
 
-> [!WARNING]
+> [!WARNING]  
 > While EKG.gg mostly uses a vanilla version of Handlebars, we _have_ removed
 > the functionality to disable HTML escaping using the `{{{}}}` expression.
 > Please do not attempt to construct HTML as a string, attach it to the state,
-> then try and use the `{{{}}}` expression in Handlebars. You will get an
-> error. Instead please rely on our view helpers that are linked below.
+> then try and use the `{{{}}}` expression in Handlebars. You will get an error.
+> Instead please rely on our view helpers that are linked below.
 
 ### Further reading
 
-* [Handlebars docs][handlebars]
-* [EKG.gg markup best practices](./docs/templating/best-practicices.md)
-* [List of EKG.gg view helpers](./docs/templating/list-of-helpers.md)
+- [Handlebars docs][handlebars]
+- [EKG.gg markup best practices](./docs/templating/best-practices.md)
+- [List of EKG.gg view helpers](./docs/templating/list-of-helpers.md)
 
 ## Styling - How the markup looks to users
 
-**Language: CSS**
+**Language: CSS + Handlebars**
 
 EKG.gg gives you nearly the full power of modern CSS to style your widgets.
 Let's take a look at a simple example.
@@ -219,53 +208,52 @@ Let's take a look at a simple example.
   max-width: 500px;
   margin: 0 auto;
   display: flex;
-  flex-direction: col;
+  flex-direction: column;
   background-color: var(--primary-bg);
   color: var(--primary-color);
 
   /* CSS Nesting */
   .num {
     font-size: 2em;
-    font-style: bold;
+    font-weight: bold;
   }
 
   .subtext {
     font-size: 0.8em;
     /* color-mix() */
-    color: color-mix(in oklab, var(--primary-color), black 30%)
+    color: color-mix(in oklab, var(--primary-color), black 30%);
   }
 }
 ```
 
-> [!WARNING]
+> [!WARNING]  
 > Most likely the final browser that will be rendering your widget will be OBS.
 > Most of the time widgets are added to a scene that will then be added as a
 > browser source of OBS. While OBS uses [Chromium][chromium] underneath the
-> hood, they currently use a [pretty old version of Chromium][obsversion].
-> While EKG.gg does not limit what CSS you use, please ensure the CSS you end
-> up writing does not use any features after Chrome 127. If you do they will
-> most likely not work when your users go to use your widget in OBS. Feel free
-> to use a site like [CanIUse][caniuse] to check what is supported where.
+> hood, they currently use a [pretty old version of Chromium][obsversion]. While
+> EKG.gg does not limit what CSS you use, please ensure the CSS you end up
+> writing does not use any features after Chrome 127. If you do they will most
+> likely not work when your users go to use your widget in OBS. Feel free to use
+> a site like [CanIUse][caniuse] to check what is supported where.
 
 ### Further Reading
 
-* [Enter and exiting animations](./docs/styling/enter-and-exit-animations.md)
-* [Learn about OKLCH colors][oklch]
+- [Enter and exit animations](./docs/styling/enter-and-exit-animations.md)
+- [Learn about OKLCH colors][oklch]
 
 ## Settings - Allowing your users to customize things
 
-Often times your users will want the ability to tweak your Widget in some way.
+Oftentimes your users will want the ability to tweak your Widget in some way.
 Maybe they want to change some colors around? Maybe they want to customize how
 long an alert appears on screen until it fades? Maybe they want to change the
 thank you message donos over a certain size get? In any and all of these cases
-you don't want your users to modify the source code of your widget to make
-these changes for themselves. _You_ as the widget creator should be able to
-choose how and what users are able to customize. That's where EKG.gg settings
-come in. 
+you don't want your users to modify the source code of your widget to make these
+changes for themselves. _You_ as the widget creator should be able to choose how
+and what users are able to customize. That's where EKG.gg settings come in.
 
 When you create or update your widget you can optionally add a list of settings
-and their schemas. This list will be given to EKG.gg as JSON. Let's look at
-some example settings.
+and their schemas. This list will be given to EKG.gg as JSON. Let's look at some
+example settings.
 
 ```json
 {
@@ -316,7 +304,9 @@ widget have access to the user's settings. Let's look at all three parts.
 ```js
 // In your scripts
 EKG.widget("MyWidget")
-  .initialState(() => ({ /* ... */ }))
+  .initialState(() => ({
+    /* ... */
+  }))
   .register((event, state, ctx) => {
     // Settings can be found on the `ctx` object
     const settings = ctx.settings;
@@ -336,15 +326,15 @@ EKG.widget("MyWidget")
 }
 ```
 
-> [!TIP]
+> [!TIP]  
 > Settings can be a blessing and a curse. The more settings you add the more
-> your users can customize your widget to fit their unique needs. But if you
-> add _too_ many settings it can sometimes feel overwhelming for the streamer
-> to configure. Try to see you can strike a nice middle ground. 
+> your users can customize your widget to fit their unique needs. But if you add
+> _too_ many settings it can sometimes feel overwhelming for the streamer to
+> configure. Try to see if you can strike a nice middle ground.
 
 ### Further reading
 
-* [List of setting types](./docs/settings/list-of-types.md)
+- [List of setting types](./docs/settings/list-of-types.md)
 
 ## Development - How to _not_ build in a vacuum
 
@@ -356,42 +346,43 @@ to build the whole thing, upload it, and testing it live? That's where the
 EKG.gg devkit comes in!
 
 Our devkit will enable you to build your widget from the comfort of your own PC
-using whatever code editor you like. Because our SDK uses NodeJS + NPM it
-should work on any OS and any [evergreen browser][evergreen]. 
+using whatever code editor you like. Because our SDK uses NodeJS + NPM it should
+work on any OS and any [evergreen browser][evergreen].
 
-> [!TIP]
-> While you can develop in any browser you like, as mentioned before,
-> ultimately your widget will often be running in the embed browser inside OBS.
-> Currently that is Chromium version 127. For maximum compatibility you may
-> want to consider using Chrome as the browser you choose to develop with.
+> [!TIP]  
+> While you can develop in any browser you like, as mentioned before, ultimately
+> your widget will often be running in the embed browser inside OBS. Currently
+> that is Chromium version 127. For maximum compatibility you may want to
+> consider using Chrome as the browser you choose to develop with.
 
 Here's how you install the devkit and start a new project:
+
 ```
-npm create ekg [folder name]
+npm create ekg@latest [folder name]
 ```
 
-You can also use `pnpm` or `bun` instead of `npm`. Once you've created a
-project `cd` in to the new folder, and run `npm run dev`
+You can also use `pnpm` or `bun` instead of `npm`. Once you've created a project
+`cd` into the new folder, and run `npm run dev`
 
-Learn more about devkit from it's github page: https://github.com/ekggg/devkit
+Learn more about devkit from its GitHub page: https://github.com/ekggg/devkit
 
 ## Packaging - Getting ready to deploy to EKG.gg
 
-Okay, you've now been able to build your widget with the EKG.gg SDK and it
-works great. We're so excited for this next step for you, having your widget go
-live! For us to list your widget on the EKG.gg widget marketplace we'll need
-you to upload said widget to us. This includes all of the widget's source
-files, it's manifest file, and all related other assets your widget needs
-(images, sounds, etc).
+Okay, you've now been able to build your widget with the EKG.gg SDK and it works
+great. We're so excited for this next step for you, having your widget go live!
+For us to list your widget on the EKG.gg widget marketplace we'll need you to
+upload said widget to us. This includes all of the widget's source files, its
+manifest file, and all related other assets your widget needs (images, audio,
+etc).
 
 To do this, EKG.gg requires two things. A `manifest.json` file fully filled out
-and a `.zip` file containing everything, including said manifest file.
+and a folder containing everything, including said manifest file.
 
 **`manifest.json`**
 
 The manifest file contains all of the information about your widget that EKG.gg
-needs to know about. This is includes the names of all of your sources files,
-the list of additional assets, your widget's settings, etc. Let's look at an
+needs to know about. This includes the names of all of your source files, the
+list of additional assets, your widget's settings, etc. Let's look at an
 example.
 
 ```json
@@ -413,38 +404,38 @@ example.
       "file": "bg.png"
     },
     "large-dono-alarm": {
-      "type": "sound",
+      "type": "audio",
       "file": "kaboom.wav"
     }
   }
 }
 ```
 
-The manifest lists our all of the files and settings the widget ultimately
-needs. Make sure you include any and all files your widget references.
+The manifest lists all of the files and settings the widget ultimately needs.
+Make sure you include any and all files your widget references.
 
-> [!WARNING]
+> [!WARNING]  
 > If you don't list an asset in your manifest file even if it's included in the
-> final `.zip` file, it will not be uploaded to EKG.gg's servers. So make sure
-> to do a full audit!
+> final folder, it will not be uploaded to EKG.gg's servers. So make sure to do
+> a full audit!
 
 **Building your assets**
 
-Running `npm run build` inside the devkit will ensure all of your assets are
-built and ready to be uploaded to EKG.gg.
+Running `npm run build` with the devkit will ensure all of your assets are built
+into a folder called `dist` and ready to be uploaded to EKG.gg.
 
-**The final zip**
+**The final folder**
 
-Once you feel good about your source files, settings, assets, and manifest
-file; it's time to wrap them all up into one. Feel free to use your own
-favorite zipping software. Just ensure all files referenced in the manifest are
-located in the zip in the referenced locations.
+Once you feel good about your source files, settings, assets, and manifest file;
+it's time to wrap them all up into one. Just ensure all files referenced in the
+manifest are located in the folder in the referenced locations. If you use the
+devkit, it will validate this for you.
 
-Once you have this final zip file head on over the [EKG.gg][ekg] itself, go to
-the developer portal, and either update an existing widget of yours or create a
-brand new one. 
+Once you have this final folder head on over the [EKG.gg][ekg] itself, go to the
+developer portal, and either update an existing widget of yours or create a
+brand new one.
 
-> [!NOTE]
+> [!NOTE]  
 > For safety reasons EKG.gg staff may not immediately publicly publish your new
 > version. Instead it will be put into the review queue and a staff member will
 > ensure that your widget meets the EKG.gg safety standards. Be assured, EKG.gg
@@ -459,12 +450,12 @@ brand new one.
 For those that made it to the bottom of this very large README file, we thank
 you for your dedication and admire your impressive attention span. As your
 reward, you now get to learn about some of the coolest parts of EKG.gg (in our
-opinion); security! 
+opinion); security!
 
 At EKG.gg we take security extremely seriously. If our platform cannot be
 trusted then we have failed as an organization. But those that are possibly
-security minded may already see some of the challenges EKG.gg faces. Namely,
-for the platform to work we need to run third-party code not written by us. And
+security minded may already see some of the challenges EKG.gg faces. Namely, for
+the platform to work we need to run third-party code not written by us. And
 unfortunately while web technologies are super prevalent and easy to use,
 they're not known for their security. Here is a _short_ list of things that
 could go wrong:
@@ -476,12 +467,13 @@ could go wrong:
 3. A bad actor could try and mess with all widgets in the scene (i.e.
    `window.EKG.widget = myEvilFunction`)
 4. A troll could hot link to an image that during the review looks harmless and
-   nice and later during a major stream updates the image to be pr0n
+   nice and later during a major stream updates the image to be a bannable
+   offense.
 
-While none of these would have been EKG.gg's _fault per se_, we don't think
-our job is done until none of these are possible. Streamers and widget
-developers should both feel extremely safe and taken care of when they give us
-the privilege of their time, attention, and trust of their communities.
+While none of these would have been EKG.gg's _fault per se_, we don't think our
+job is done until none of these are possible. Streamers and widget developers
+should both feel extremely safe and taken care of when they give us the
+privilege of their time, attention, and trust of their communities.
 
 Let's start with an overall diagram of the EKG.gg security architecture.
 
@@ -552,29 +544,28 @@ graph TB
 
 **Complete Isolation**
 
-To prevent widgets from accessing sensitive data or interfering with each
-other, EKG.gg implements complete isolation. Widgets cannot make external
-requests or communicate with outside services, ensuring that chat messages and
-private stream data stay secure. Additionally, widgets cannot access the
-streamer's computer, files, or system resources, and they cannot interfere with
-or access other widgets' data or functionality.
+To prevent widgets from accessing sensitive data or interfering with each other,
+EKG.gg implements complete isolation. Widgets cannot make external requests or
+communicate with outside services, ensuring that chat messages and private
+stream data stay secure. Additionally, widgets cannot access the streamer's
+computer, files, or system resources, and they cannot interfere with or access
+other widgets' data or functionality.
 
 **Secure Execution Environment**
 
 Widget JavaScript executes in a sandboxed QuickJS virtual machine with
 restricted capabilities, similar to how the rest of the platform handles
-untrusted code. Each widget runs in a separate web worker thread, preventing
-any single widget from blocking the main thread. Only essential globals are
+untrusted code. Each widget runs in a separate web worker thread, preventing any
+single widget from blocking the main thread. Only essential globals are
 available to widgets, blocking access to potentially dangerous browser APIs.
 
 **Visual Protection with iframes**
 
-Each widget's HTML and CSS renders within its own iframe container, which
-solves the CSS interference problem we mentioned earlier. Widget CSS cannot
-affect the main interface or other widgets due to these iframe boundaries. The
-iframes also prevent widgets from breaking out of their designated display
-areas, and all visual changes are validated and applied through controlled
-iframe updates.
+Each widget's HTML and CSS renders within its own iframe container, which solves
+the CSS interference problem we mentioned earlier. Widget CSS cannot affect the
+main interface or other widgets due to these iframe boundaries. The iframes also
+prevent widgets from breaking out of their designated display areas, and all
+visual changes are validated and applied through controlled iframe updates.
 
 **Data Security**
 

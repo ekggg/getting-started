@@ -31,18 +31,19 @@ The easiest way to write TypeScript widgets is to use the EKG devkit. It handles
 all the compilation and type generation for you automatically.
 
 ```
-npm create ekg my-widget
+npm create ekg@latest my-widget
 ```
 
-You can also use `pnpm create ekg` or `bun create ekg`. Once the project is
-created, you'll have a fully configured TypeScript environment ready to go.
+You can also use `pnpm create ekg@latest` or `bun create ekg@latest`. Once the
+project is created, you'll have a fully configured TypeScript environment ready
+to go.
 
 ### What the devkit provides
 
 When you run `npm run dev`, the devkit does several things for you:
 
 1. **Downloads type definitions** - Fetches the latest EKG type definitions from
-   the platform and stores them in the `.runtime` folder
+   the platform and stores them in a hidden `.runtime` folder
 2. **Generates widget-specific types** - Creates an `ekg.d.ts` file in your
    project root that includes types based on your manifest's settings and assets
 3. **Compiles your TypeScript** - Uses tsdown to compile your widget script to
@@ -61,10 +62,9 @@ my-widget/
 ├── template.hbs      # Handlebars template
 ├── styles.css        # Widget styles
 ├── ekg.d.ts          # Generated types (don't edit manually)
-└── .runtime/         # Downloaded runtime files
 ```
 
-> [!WARNING]
+> [!WARNING]  
 > The `ekg.d.ts` file is regenerated based on your manifest every time you run
 > the devkit. Don't edit this file manually as your changes will be lost.
 
@@ -170,7 +170,7 @@ settings and assets. Given this manifest:
   },
   "assets": {
     "alertSound": {
-      "type": "sound",
+      "type": "audio",
       "file": "alert.wav"
     }
   }
@@ -196,20 +196,8 @@ autocomplete setting names as you type.
 
 ## Available event types
 
-The `EKG.Event` union includes the following event types:
-
-| Event Type | Interface | Description |
-|------------|-----------|-------------|
-| `ekg.channel.followed` | `ChannelFollowed` | A user followed the channel |
-| `ekg.chat.sent` | `ChatSent` | A chat message was sent |
-| `ekg.event.deleted` | `EventDeleted` | An event was deleted by a moderator |
-| `ekg.subscription.gifted` | `SubscriptionGifted` | A subscription was gifted |
-| `ekg.subscription.renewed` | `SubscriptionRenewed` | A subscription was renewed |
-| `ekg.subscription.started` | `SubscriptionStarted` | A new subscription started |
-| `ekg.tip.sent` | `TipSent` | A monetary tip was sent |
-| `ekg.user.messages_cleared` | `UserMessagesCleared` | A user's messages were cleared |
-| `RESIZE` | `ResizeEvent` | The widget container was resized |
-| `TICK` | `TickEvent` | A periodic tick event for animations |
+See [List of EKG events](./list-of-events.md) for details on available event
+types and what data your widget will receive.
 
 ## Utility functions
 
@@ -232,18 +220,20 @@ links, or mentions. Here's how to work with them:
 
 ```ts
 function processMessage(nodes: EKG.ChatNode[]): string {
-  return nodes.map(node => {
-    switch (node.type) {
-      case "text":
-        return node.text;
-      case "emoji":
-        return node.code;
-      case "mention":
-        return `@${node.mentionedDisplayName}`;
-      case "link":
-        return node.href;
-    }
-  }).join("");
+  return nodes
+    .map((node) => {
+      switch (node.type) {
+        case "text":
+          return node.text;
+        case "emoji":
+          return node.code;
+        case "mention":
+          return `@${node.mentionedDisplayName}`;
+        case "link":
+          return node.href;
+      }
+    })
+    .join("");
 }
 ```
 

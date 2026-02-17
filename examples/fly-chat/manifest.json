@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ekg.gg/schemas/manifest.json",
+  "name": "FlyChat",
+  "version": "0.0.1",
+  "description": "Chat messages fly across your stream",
+  "template": "template.hbs",
+  "css": "styles.css",
+  "js": "script.ts",
+  "settings": {
+    "fontFamily": {
+      "type": "font",
+      "name": "Font Family",
+      "default": "Inter"
+    },
+    "fontWeight": {
+      "type": "integer",
+      "name": "Font Weight",
+      "default": 400,
+      "choices": {
+        "100": "100: Thin",
+        "200": "200: Extra Light",
+        "300": "300: Light",
+        "400": "400: Normal",
+        "500": "500: Medium",
+        "600": "600: Semi Bold",
+        "700": "700: Bold",
+        "800": "800: Extra Bold",
+        "900": "900: Black"
+      }
+    },
+    "fontColor": {
+      "type": "color",
+      "name": "Font Color",
+      "default": "#ffffff"
+    },
+    "minFontSize": {
+      "type": "integer",
+      "name": "Minimum Font Size",
+      "description": "The smallest size a message can be, in pixels.",
+      "default": 24
+    },
+    "maxFontSize": {
+      "type": "decimal",
+      "name": "Maximum Font Size",
+      "description": "The biggest size a message can be, in pixels.",
+      "default": 48
+    },
+    "outlineColor": {
+      "type": "color",
+      "name": "Outline Color",
+      "default": "#000000"
+    },
+    "outlineWidth": {
+      "type": "decimal",
+      "name": "Outline Width",
+      "default": 2.0
+    },
+    "minDuration": {
+      "type": "decimal",
+      "name": "Minimum Duration",
+      "description": "The fastest a message can go across the screen, in seconds.",
+      "default": 1.0
+    },
+    "maxDuration": {
+      "type": "decimal",
+      "name": "Maximum Duration",
+      "description": "The slowest a message can go across the screen, in seconds.",
+      "default": 4.0
+    }
+  }
+}

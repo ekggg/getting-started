@@ -9,9 +9,9 @@ sandboxed environment.
 
 The EKG.gg widget VM does not expose the JavaScript `Date` global for security
 reasons. All time values are represented as Unix timestamps in milliseconds,
-including `ctx.now`, event timestamps, and any time-related data in your
-widget state. Design your time logic around these numeric values rather than
-attempting to use Date objects or helpers.
+including `ctx.now`, event timestamps, and any time-related data in your widget
+state. Design your time logic around these numeric values rather than attempting
+to use Date objects or helpers.
 
 ## Using `ctx.now` for current time
 
@@ -36,7 +36,7 @@ const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
 // Check if something happened within the last hour
 const oneHourMs = 60 * 60 * 1000;
-const isRecent = (ctx.now - eventTimestamp) < oneHourMs;
+const isRecent = ctx.now - eventTimestamp < oneHourMs;
 
 // Format relative time display
 function formatTimeAgo(timestamp, now) {
@@ -44,14 +44,14 @@ function formatTimeAgo(timestamp, now) {
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);
   const diffHours = Math.floor(diffMinutes / 60);
-  
+
   if (diffSeconds < 60) return `${diffSeconds}s ago`;
   if (diffMinutes < 60) return `${diffMinutes}m ago`;
   return `${diffHours}h ago`;
 }
 
 // Schedule something for the future
-const fiveMinutesLater = ctx.now + (5 * 60 * 1000);
+const fiveMinutesLater = ctx.now + 5 * 60 * 1000;
 if (ctx.now >= scheduledTime) {
   // Time to execute the scheduled action
 }
@@ -62,30 +62,30 @@ if (ctx.now >= scheduledTime) {
 When implementing features like message timeouts or fade-out animations, store
 timestamp information in your widget's state and calculate elapsed time using
 the difference between `ctx.now` and your stored timestamps. For example, to
-hide messages after 30 seconds, you might store `{ message: "Hello", shownAt:
-ctx.now }` and then check if `ctx.now - messageState.shownAt > 30000` in
-subsequent event handlers. This approach works reliably because `ctx.now`
-advances consistently with each event.
+hide messages after 30 seconds, you might store
+`{ message: "Hello", shownAt: ctx.now }` and then check if
+`ctx.now - messageState.shownAt > 30000` in subsequent event handlers. This
+approach works reliably because `ctx.now` advances consistently with each event.
 
 ## Working without timers
 
 Traditional JavaScript timing functions like `setTimeout` and `setInterval`
-aren't available in the EKG.gg environment for security reasons. Instead,
-design your time-based logic to be event-driven by checking elapsed time
-whenever your `.register()` callback is called. This pattern actually results
-in more efficient widgets since time calculations only happen when events
-occur, rather than continuously running in the background. Consider using
-techniques like storing "next action time" in your state and comparing it
-against `ctx.now` on each event to trigger time-based behaviors.
+aren't available in the EKG.gg environment for security reasons. Instead, design
+your time-based logic to be event-driven by checking elapsed time whenever your
+`.register()` callback is called. This pattern actually results in more
+efficient widgets since time calculations only happen when events occur, rather
+than continuously running in the background. Consider using techniques like
+storing "next action time" in your state and comparing it against `ctx.now` on
+each event to trigger time-based behaviors.
 
 ## Using the `TICK` event for cleanup
 
-EKG.gg provides a special `TICK` system event that's fired periodically to
-help widgets perform cleanup and maintenance tasks. This event is ideal for
-removing expired data, cleaning up old messages, or performing other
-time-based maintenance without relying on traditional timers. When handling
-the `TICK` event, check `ctx.now` against your stored timestamps to determine
-what needs to be cleaned up or updated.
+EKG.gg provides a special `TICK` system event that's fired periodically to help
+widgets perform cleanup and maintenance tasks. This event is ideal for removing
+expired data, cleaning up old messages, or performing other time-based
+maintenance without relying on traditional timers. When handling the `TICK`
+event, check `ctx.now` against your stored timestamps to determine what needs to
+be cleaned up or updated.
 
 ```javascript
 EKG.widget("TimedMessages")
@@ -94,8 +94,8 @@ EKG.widget("TimedMessages")
     switch (event.type) {
       case "TICK":
         // Remove messages older than 30 seconds
-        const messages = state.messages.filter(msg =>
-          ctx.now - msg.timestamp < 30_000
+        const messages = state.messages.filter(
+          (msg) => ctx.now - msg.timestamp < 30_000,
         );
         return { ...state, messages };
 

@@ -9,12 +9,11 @@ other widgets on the page.
 ## Use CSS transitions and keyframes
 
 CSS transitions and animations work perfectly in EKG.gg widgets. Use CSS
-`@keyframes` for complex animations and `transition` properties for simple
-state changes. For enter animations, consider using `transform` properties like
+`@keyframes` for complex animations and `transition` properties for simple state
+changes. For enter animations, consider using `transform` properties like
 `translateY()` or `scale()` combined with `opacity` changes for smooth,
-performant effects. Remember that animating `transform` and `opacity`
-properties is more performant than animating layout properties like `width` or
-`height`.
+performant effects. Remember that animating `transform` and `opacity` properties
+is more performant than animating layout properties like `width` or `height`.
 
 ## Coordinate exit animations with state
 
@@ -29,15 +28,24 @@ on `ctx.now`.
 ## Implement time-based removal patterns
 
 Since `setTimeout` isn't available, use event-driven patterns for animation
-cleanup. Store animation metadata like `{ item: data, exitingAt: ctx.now,
-exitDuration: 300 }` in your state, then check during each event if `ctx.now -
-exitingAt > exitDuration` to determine when to actually remove items. This
-ensures animations complete before elements disappear from the DOM.
+cleanup. Store animation metadata like
+`{ item: data, exitingAt: ctx.now, exitDuration: 300 }` in your state, then
+check during each event if `ctx.now - exitingAt > exitDuration` to determine
+when to actually remove items. This ensures animations complete before elements
+disappear from the DOM.
 
 ## Keep animations purposeful
 
 Keep animations short and purposeful - typically 200-500ms for enter/exit
-effects. Consider that streamers may have many widgets active simultaneously,
-so overly long or distracting animations can become overwhelming. Test your
+effects. Consider that streamers may have many widgets active simultaneously, so
+overly long or distracting animations can become overwhelming. Test your
 animations at different speeds and consider providing settings to let streamers
 adjust animation duration or disable them entirely for accessibility reasons.
+
+## Runtime hooks that make this easier
+
+- `ekg-removed` attribute for transition-aware removal
+- `ekg-size` attribute for width/height CSS variables
+
+See more details in
+[Templating Helpers](../templating/list-of-helpers.md#EKG-Custom-Attributes)

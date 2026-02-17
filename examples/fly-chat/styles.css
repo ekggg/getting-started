@@ -1,0 +1,45 @@
+:root {
+  --font-family: {{ settings.fontFamily }};
+  --font-weight: {{ settings.fontWeight }};
+  --font-color: {{ settings.fontColor }};
+  --outline-color: {{ settings.outlineColor }};
+  --outline-width: {{ settings.outlineWidth }}px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: transparent;
+
+  font-family: var(--font-family);
+  font-weight: var(--font-weight);
+  color: var(--font-color);
+  text-shadow:
+    0 0 var(--outline-width) var(--outline-color),
+    0 0 var(--outline-width) var(--outline-color),
+    0 0 var(--outline-width) var(--outline-color);
+}
+
+.message {
+  position: absolute;
+  transform: translate(-100%, calc(var(--position) * (100vh - 100%)));
+  transition: transform var(--duration) linear;
+  width: max-content;
+
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  font-size: var(--size);
+}
+.message img {
+  height: var(--size);
+}
+
+@starting-style {
+  .message {
+    transform: translate(100vw, calc(var(--position) * (100vh - 100%)));
+  }
+}

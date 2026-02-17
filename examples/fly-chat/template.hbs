@@ -1,0 +1,5 @@
+{{#each messages}}
+<div id="{{ id }}" class="message" style="--position: {{ position }}; --size: {{ size }}px; --duration: {{ duration }}ms;">
+  {{ displayName }}: {{> renderChat message }}
+</div>
+{{/each}}

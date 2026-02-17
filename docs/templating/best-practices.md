@@ -1,17 +1,17 @@
 # EKG.gg markup best practices
 
-Writing maintainable and performant Handlebars templates is crucial for
-creating great widgets. EKG.gg's templating system is built on Handlebars with
-some custom helpers and security restrictions that make your widgets both
-powerful and safe.
+Writing maintainable and performant Handlebars templates is crucial for creating
+great widgets. EKG.gg's templating system is built on Handlebars with some
+custom helpers and security restrictions that make your widgets both powerful
+and safe.
 
 ## Keep templates simple and readable
 
 Your templates should be easy to understand at a glance. Use meaningful class
 names, break complex layouts into inline partials, and avoid deep nesting when
 possible. Remember that someone (including future you) will need to maintain
-this code. If you find yourself writing complex logic in your template,
-consider moving that logic into your widget's state handling instead.
+this code. If you find yourself writing complex logic in your template, consider
+moving that logic into your widget's state handling instead.
 
 ## Use inline partials for reusable components
 
@@ -33,6 +33,5 @@ handling.
 ## No direct writing of HTML
 
 EKG.gg has removed the `{{{ }}}` triple-bracket syntax to prevent XSS attacks,
-so never try to output raw HTML strings from your state. Instead, structure
-your state to work with Handlebars' built-in helpers and EKG.gg's provided
-helpers.
+so never try to output raw HTML strings from your state. Instead, structure your
+state to work with Handlebars' built-in helpers and EKG.gg's provided helpers.

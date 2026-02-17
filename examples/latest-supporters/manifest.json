@@ -1,0 +1,87 @@
+{
+  "$schema": "https://ekg.gg/schemas/manifest.json",
+  "name": "Latest Supporters",
+  "description": "Display your latest followers, subscribers, tips, and gift subs",
+  "version": "0.0.2",
+  "js": "script.ts",
+  "css": "styles.css.hbs",
+  "template": "template.html.hbs",
+  "settings": {
+    "backgroundColor": {
+      "type": "color",
+      "name": "Background Color",
+      "default": "#000000b3"
+    },
+    "textColor": {
+      "type": "color",
+      "name": "Text Color",
+      "default": "#ffffff"
+    },
+    "accentColor": {
+      "type": "color",
+      "name": "Accent Color",
+      "default": "#9147ff"
+    },
+    "followerColor": {
+      "type": "color",
+      "name": "Follower Icon Color",
+      "default": "#ff6b6b"
+    },
+    "subscriberColor": {
+      "type": "color",
+      "name": "Subscriber Icon Color",
+      "default": "#9147ff"
+    },
+    "tipColor": {
+      "type": "color",
+      "name": "Tip Icon Color",
+      "default": "#00c853"
+    },
+    "giftColor": {
+      "type": "color",
+      "name": "Gift Sub Icon Color",
+      "default": "#ff9800"
+    },
+    "fontSize": {
+      "type": "integer",
+      "name": "Font Size (px)",
+      "default": 16,
+      "min": 12,
+      "max": 32
+    },
+    "showFollower": {
+      "type": "boolean",
+      "name": "Show Latest Follower",
+      "default": true
+    },
+    "showSubscriber": {
+      "type": "boolean",
+      "name": "Show Latest Subscriber",
+      "default": true
+    },
+    "showTip": {
+      "type": "boolean",
+      "name": "Show Latest Tip",
+      "default": true
+    },
+    "showGiftSub": {
+      "type": "boolean",
+      "name": "Show Latest Gift Sub",
+      "default": true
+    },
+    "showResub": {
+      "type": "boolean",
+      "name": "Show Latest Resub",
+      "default": true
+    },
+    "layout": {
+      "type": "string",
+      "name": "Layout",
+      "default": "vertical",
+      "choices": {
+        "vertical": "Vertical",
+        "horizontal": "Horizontal"
+      }
+    }
+  }
+}

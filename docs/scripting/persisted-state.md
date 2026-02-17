@@ -23,10 +23,17 @@ EKG.widget("SubMilestones")
       const newMilestones = [...state.milestones];
 
       if (newTotal % 100 === 0) {
-        newMilestones.push({ count: newTotal, reachedAt: ctx.now });
+        newMilestones.push({
+          count: newTotal,
+          reachedAt: ctx.now,
+        });
       }
 
-      return { ...state, totalSubs: newTotal, milestones: newMilestones };
+      return {
+        ...state,
+        totalSubs: newTotal,
+        milestones: newMilestones,
+      };
     }
     return state;
   });
@@ -44,10 +51,18 @@ your widget chain.
 
 ```js
 EKG.widget("MyWidget")
-  .initialState(() => ({ /* ... */ }))
-  .persist((state) => ({ /* what to save */ }))
-  .restore((state, persisted) => ({ /* how to restore */ }))
-  .register((event, state, ctx) => { /* ... */ });
+  .initialState(() => ({
+    /* ... */
+  }))
+  .persist((state) => ({
+    /* what to save */
+  }))
+  .restore((state, persisted) => ({
+    /* how to restore */
+  }))
+  .register((event, state, ctx) => {
+    /* ... */
+  });
 ```
 
 **`.persist(fn)`** takes your current state and returns an object containing
@@ -88,7 +103,10 @@ EKG.widget("SubMilestones")
       const newMilestones = [...state.milestones];
 
       if (newTotal % 100 === 0) {
-        newMilestones.push({ count: newTotal, reachedAt: ctx.now });
+        newMilestones.push({
+          count: newTotal,
+          reachedAt: ctx.now,
+        });
       }
 
       return {
@@ -104,8 +122,8 @@ EKG.widget("SubMilestones")
 ```
 
 Notice how we only persist `totalSubs` and `milestones`, not the UI state like
-`isAnimating`. There's no point in saving transient visual state—it should
-reset to its default when the widget reloads anyway.
+`isAnimating`. There's no point in saving transient visual state—it should reset
+to its default when the widget reloads anyway.
 
 ## When persistence happens
 
@@ -120,7 +138,7 @@ This means there's a small window where very recent changes might not be
 persisted if something unexpected happens (like a browser crash). For most
 widgets this is fine—losing a few seconds of data during a crash is acceptable.
 
-> [!NOTE]
+> [!NOTE]  
 > Don't rely on persistence for split-second accuracy. If your widget absolutely
 > cannot lose a single event, consider designing it to be resilient to restarts
 > instead.
@@ -135,11 +153,13 @@ doesn't update state, it simply doesn't exist until it's back on screen.
 This has implications for what persistence can and cannot do:
 
 **Persistence helps with:**
+
 - Switching between scenes that both contain your widget
 - Refreshing the browser source
 - Restarting OBS (if the widget was on the active scene before shutdown)
 
 **Persistence cannot help with:**
+
 - Events that happen while your widget isn't on screen
 - Keeping a running tally of things that happen during scenes without your
   widget
@@ -177,22 +197,24 @@ donates bits while they're on their "Gaming" scene, the widget will never see
 that event. Persistence saves what the widget knows, but it can't save what the
 widget never saw.
 
-> [!TIP]
+> [!TIP]  
 > For widgets that need to track totals across an entire stream, consider
-> placing them on every scene, even if marked not visible. A `display: none` widget
-> still receives events and persists state.
+> placing them on every scene, even if marked not visible. A `display: none`
+> widget still receives events and persists state.
 
 ## What to persist (and what not to)
 
 A good rule of thumb: persist data, not UI state.
 
 **Good candidates for persistence:**
+
 - Counters and totals
 - Lists of items (recent followers, chat history)
 - User achievements or milestones
 - Configuration derived from events
 
 **Bad candidates for persistence:**
+
 - Animation states (`isAnimating`, `currentFrame`)
 - Temporary flags (`shouldPlaySound`, `hasNewMessage`)
 - Cached calculations that can be recomputed
@@ -253,5 +275,5 @@ empty string.
 ## Further reading
 
 - [Using the ctx object](./the-ctx-object.md)
-- [Scripting best practices](./best-practicies.md)
+- [Scripting best practices](./best-practices.md)
 - [List of EKG events](./list-of-events.md)
