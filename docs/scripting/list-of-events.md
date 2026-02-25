@@ -25,6 +25,7 @@ real events but rather signals to your widget to update its state.
 | `ekg.subscription.gifted`  | A subscription gift event occurred.    |
 | `ekg.channel.followed`     | A user followed the channel.           |
 | `ekg.audience.transferred` | A raid/viewer transfer occurred.       |
+| `ekg.poll.updated`         | A poll was created, updated, or ended. |
 | `RESIZE`                   | Widget dimensions changed.             |
 | `TICK`                     | Periodic maintenance signal fired.     |
 
@@ -36,18 +37,18 @@ real events but rather signals to your widget to update its state.
 is the most common event you'll work with and contains rich information about
 the author and message content.
 
-| Property            | Required | Type       | Description                                                 |
-| ------------------- | -------- | ---------- | ----------------------------------------------------------- |
-| `id`                | Yes      | string     | Unique identifier for this chat message                     |
-| `userId`            | Yes      | string     | Unique identifier for the message author                    |
-| `userDisplayName`   | Yes      | string     | Display name of the message author                          |
-| `message`           | Yes      | ChatNode[] | Array of rich-text nodes (text, emojis, mentions, links)    |
-| `isBroadcaster`     | Yes      | boolean    | Whether the author is the channel broadcaster               |
-| `isVip`             | Yes      | boolean    | Whether the author has VIP status                           |
-| `isModerator`       | Yes      | boolean    | Whether the author is a channel moderator                   |
-| `isSubscriber`      | Yes      | boolean    | Whether the author is subscribed to the channel             |
-| `platform`          | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
-| `raw`               | Yes      | object     | Raw event data from the original platform                   |
+| Property          | Required | Type       | Description                                                 |
+| ----------------- | -------- | ---------- | ----------------------------------------------------------- |
+| `id`              | Yes      | string     | Unique identifier for this chat message                     |
+| `userId`          | Yes      | string     | Unique identifier for the message author                    |
+| `userDisplayName` | Yes      | string     | Display name of the message author                          |
+| `message`         | Yes      | ChatNode[] | Array of rich-text nodes (text, emojis, mentions, links)    |
+| `isBroadcaster`   | Yes      | boolean    | Whether the author is the channel broadcaster               |
+| `isVip`           | Yes      | boolean    | Whether the author has VIP status                           |
+| `isModerator`     | Yes      | boolean    | Whether the author is a channel moderator                   |
+| `isSubscriber`    | Yes      | boolean    | Whether the author is subscribed to the channel             |
+| `platform`        | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object     | Raw event data from the original platform                   |
 
 **`ekg.event.deleted`** - Triggered when a chat message is deleted by a
 moderator or the platform.
@@ -61,31 +62,31 @@ moderator or the platform.
 **`ekg.user.moderated`** - Triggered when a user is banned or timed out,
 indicating that all of their messages should be cleared from the widget.
 
-| Property               | Required | Type   | Description                                                        |
-| ---------------------- | -------- | ------ | ------------------------------------------------------------------ |
-| `userId`               | Yes      | string | ID of the banned user                                              |
-| `userDisplayName`      | Yes      | string | Display name of the banned user                                    |
-| `moderatorId`          | No       | string | ID of the moderator who applied the moderation                     |
-| `moderatorDisplayName` | No       | string | Display name of the moderator who applied the moderation           |
-| `endsAt`               | No       | number | Unix timestamp (seconds) when timeout ends; null for permanent ban |
-| `platform`             | Yes      | string | Platform where the event originated ("twitch" or "youtube")        |
-| `raw`                  | Yes      | object | Raw event data from the original platform                          |
+| Property               | Required | Type   | Description                                                             |
+| ---------------------- | -------- | ------ | ----------------------------------------------------------------------- |
+| `userId`               | Yes      | string | ID of the banned user                                                   |
+| `userDisplayName`      | Yes      | string | Display name of the banned user                                         |
+| `moderatorId`          | No       | string | ID of the moderator who applied the moderation                          |
+| `moderatorDisplayName` | No       | string | Display name of the moderator who applied the moderation                |
+| `endsAt`               | No       | number | Unix timestamp (milliseconds) when timeout ends; null for permanent ban |
+| `platform`             | Yes      | string | Platform where the event originated ("twitch" or "youtube")             |
+| `raw`                  | Yes      | object | Raw event data from the original platform                               |
 
 ## Monetary Events
 
 **`ekg.tip.sent`** - Fired when someone sends a monetary tip (Twitch bits or
 YouTube Super Chat).
 
-| Property            | Required | Type       | Description                                                 |
-| ------------------- | -------- | ---------- | ----------------------------------------------------------- |
-| `userId`            | Yes      | string     | Unique identifier for the tip sender                        |
-| `userDisplayName`   | Yes      | string     | Display name of the tip sender                              |
-| `amountCents`       | Yes      | number     | Tip amount in cents (or bits for Twitch)                    |
-| `currency`          | Yes      | string     | Currency code (e.g., "USD", "BITS")                         |
-| `message`           | No       | ChatNode[] | Optional rich-text message attached to the tip              |
-| `level`             | No       | number     | Tip level for color coding (0-7, higher = larger tip)       |
-| `platform`          | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
-| `raw`               | Yes      | object     | Raw event data from the original platform                   |
+| Property          | Required | Type       | Description                                                 |
+| ----------------- | -------- | ---------- | ----------------------------------------------------------- |
+| `userId`          | Yes      | string     | Unique identifier for the tip sender                        |
+| `userDisplayName` | Yes      | string     | Display name of the tip sender                              |
+| `amountCents`     | Yes      | number     | Tip amount in cents (or bits for Twitch)                    |
+| `currency`        | Yes      | string     | Currency code (e.g., "USD", "BITS")                         |
+| `message`         | No       | ChatNode[] | Optional rich-text message attached to the tip              |
+| `level`           | No       | number     | Tip level for color coding (0-7, higher = larger tip)       |
+| `platform`        | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object     | Raw event data from the original platform                   |
 
 ## Reward Events
 
@@ -94,41 +95,39 @@ redeemed.
 
 _This event is currently emitted for Twitch only._
 
-| Property          | Required | Type   | Description                                                 |
-| ----------------- | -------- | ------ | ----------------------------------------------------------- |
-| `userId`          | Yes      | string | ID of the user who redeemed the reward                      |
-| `userDisplayName` | Yes      | string | Display name of the user who redeemed the reward            |
-| `userInput`       | No       | string | Optional text entered by the user when redeeming the reward |
-| `rewardId`        | Yes      | string | Reward ID from Twitch                                       |
-| `rewardTitle`     | Yes      | string | Reward title                                                |
-| `rewardCost`      | Yes      | number | Reward cost in channel points                               |
-| `redeemedAt`      | Yes      | number | Unix timestamp (seconds) when the reward was redeemed       |
-| `platform`        | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
-| `raw`             | Yes      | object | Raw event data from the original platform                   |
+| Property          | Required | Type       | Description                                                 |
+| ----------------- | -------- | ---------- | ----------------------------------------------------------- |
+| `userId`          | Yes      | string     | ID of the user who redeemed the reward                      |
+| `userDisplayName` | Yes      | string     | Display name of the user who redeemed the reward            |
+| `message`         | No       | ChatNode[] | Optional rich-text message attached to the redemption       |
+| `rewardId`        | Yes      | string     | Reward ID from Twitch                                       |
+| `redeemedAt`      | Yes      | number     | Unix timestamp (milliseconds) when the reward was redeemed  |
+| `platform`        | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object     | Raw event data from the original platform                   |
 
 ## Subscription Events
 
 **`ekg.subscription.started`** - Triggered when someone subscribes to the
 channel for the first time.
 
-| Property                | Required | Type   | Description                                                 |
-| ----------------------- | -------- | ------ | ----------------------------------------------------------- |
-| `userId`                | Yes      | string | Unique identifier for the new subscriber                    |
-| `userDisplayName`       | Yes      | string | Display name of the new subscriber                          |
-| `platform`              | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
-| `raw`                   | Yes      | object | Raw event data from the original platform                   |
+| Property          | Required | Type   | Description                                                 |
+| ----------------- | -------- | ------ | ----------------------------------------------------------- |
+| `userId`          | Yes      | string | Unique identifier for the new subscriber                    |
+| `userDisplayName` | Yes      | string | Display name of the new subscriber                          |
+| `platform`        | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object | Raw event data from the original platform                   |
 
 **`ekg.subscription.renewed`** - Fired when someone celebrates a subscription
 milestone or renews their subscription.
 
-| Property                | Required | Type       | Description                                                 |
-| ----------------------- | -------- | ---------- | ----------------------------------------------------------- |
-| `userId`                | Yes      | string     | Unique identifier for the subscriber                        |
-| `userDisplayName`       | Yes      | string     | Display name of the subscriber                              |
-| `monthsSubscribed`      | Yes      | number     | Total number of months subscribed                           |
-| `message`               | No       | ChatNode[] | Optional rich-text message from the subscriber              |
-| `platform`              | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
-| `raw`                   | Yes      | object     | Raw event data from the original platform                   |
+| Property           | Required | Type       | Description                                                 |
+| ------------------ | -------- | ---------- | ----------------------------------------------------------- |
+| `userId`           | Yes      | string     | Unique identifier for the subscriber                        |
+| `userDisplayName`  | Yes      | string     | Display name of the subscriber                              |
+| `monthsSubscribed` | Yes      | number     | Total number of months subscribed                           |
+| `message`          | No       | ChatNode[] | Optional rich-text message from the subscriber              |
+| `platform`         | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
+| `raw`              | Yes      | object     | Raw event data from the original platform                   |
 
 **`ekg.subscription.gifted`** - Triggered when someone gifts subscriptions to
 other users.
@@ -149,13 +148,13 @@ other users.
 
 **`ekg.channel.followed`** - Fired when someone follows the channel.
 
-| Property              | Required | Type   | Description                                                 |
-| --------------------- | -------- | ------ | ----------------------------------------------------------- |
-| `userId`              | Yes      | string | Unique identifier for the new follower                      |
-| `userDisplayName`     | Yes      | string | Display name of the new follower                            |
-| `followedAt`          | Yes      | number | Unix timestamp (seconds) when the follow occurred           |
-| `platform`            | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
-| `raw`                 | Yes      | object | Raw event data from the original platform                   |
+| Property          | Required | Type   | Description                                                 |
+| ----------------- | -------- | ------ | ----------------------------------------------------------- |
+| `userId`          | Yes      | string | Unique identifier for the new follower                      |
+| `userDisplayName` | Yes      | string | Display name of the new follower                            |
+| `followedAt`      | Yes      | number | Unix timestamp (milliseconds) when the follow occurred      |
+| `platform`        | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object | Raw event data from the original platform                   |
 
 ## Audience Events
 
@@ -171,6 +170,30 @@ _This event is currently emitted for Twitch only._
 | `viewerCount`     | Yes      | number | Number of viewers transferred                               |
 | `platform`        | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
 | `raw`             | Yes      | object | Raw event data from the original platform                   |
+
+## Poll Events
+
+**`ekg.poll.updated`** - Fired when a poll is created, receives new votes, or
+ends. This event is sent for each stage of the poll lifecycle, so you'll receive
+multiple events for the same poll as it progresses.
+
+| Property   | Required | Type         | Description                                                 |
+| ---------- | -------- | ------------ | ----------------------------------------------------------- |
+| `pollId`   | Yes      | string       | Unique identifier for the poll                              |
+| `title`    | Yes      | string       | The poll question/title                                     |
+| `isClosed` | Yes      | boolean      | Whether the poll has ended                                  |
+| `options`  | Yes      | PollOption[] | Array of poll options with vote counts                      |
+| `platform` | Yes      | string       | Platform where the event originated ("twitch" or "youtube") |
+| `raw`      | Yes      | object       | Raw event data from the original platform                   |
+
+### PollOption
+
+| Property | Required | Type   | Description                         |
+| -------- | -------- | ------ | ----------------------------------- |
+| `title`  | Yes      | string | The title/text of the poll option   |
+| `votes`  | Yes      | number | The number of votes for this option |
+
+---
 
 ## System Events
 
