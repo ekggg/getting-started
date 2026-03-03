@@ -1,7 +1,7 @@
 {
   "$schema": "https://ekg.gg/schemas/manifest.json",
   "name": "FlyChat",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Chat messages fly across your stream",
   "template": "template.hbs",
   "css": "styles.css",

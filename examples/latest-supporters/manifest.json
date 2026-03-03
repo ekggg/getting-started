@@ -2,7 +2,7 @@
   "$schema": "https://ekg.gg/schemas/manifest.json",
   "name": "Latest Supporters",
   "description": "Display your latest followers, subscribers, tips, and gift subs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "js": "script.ts",
   "css": "styles.css.hbs",
   "template": "template.html.hbs",

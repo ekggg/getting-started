@@ -64,7 +64,7 @@ const addMessage = (
     messages: [
       ...state.messages,
       {
-        id: event.id,
+        id: event.data.id,
         userId: event.data.userId,
         displayName: event.data.userDisplayName,
         message: event.data.message,
