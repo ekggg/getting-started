@@ -37,18 +37,19 @@ real events but rather signals to your widget to update its state.
 is the most common event you'll work with and contains rich information about
 the author and message content.
 
-| Property          | Required | Type       | Description                                                 |
-| ----------------- | -------- | ---------- | ----------------------------------------------------------- |
-| `id`              | Yes      | string     | Unique identifier for this chat message                     |
-| `userId`          | Yes      | string     | Unique identifier for the message author                    |
-| `userDisplayName` | Yes      | string     | Display name of the message author                          |
-| `message`         | Yes      | ChatNode[] | Array of rich-text nodes (text, emojis, mentions, links)    |
-| `isBroadcaster`   | Yes      | boolean    | Whether the author is the channel broadcaster               |
-| `isVip`           | Yes      | boolean    | Whether the author has VIP status                           |
-| `isModerator`     | Yes      | boolean    | Whether the author is a channel moderator                   |
-| `isSubscriber`    | Yes      | boolean    | Whether the author is subscribed to the channel             |
-| `platform`        | Yes      | string     | Platform where the event originated ("twitch" or "youtube") |
-| `raw`             | Yes      | object     | Raw event data from the original platform                   |
+| Property          | Required | Type         | Description                                                 |
+| ----------------- | -------- | ------------ | ----------------------------------------------------------- |
+| `id`              | Yes      | string       | Unique identifier for this chat message                     |
+| `userId`          | Yes      | string       | Unique identifier for the message author                    |
+| `userDisplayName` | Yes      | string       | Display name of the message author                          |
+| `message`         | Yes      | ChatNode[]   | Array of rich-text nodes (text, emojis, mentions, links)    |
+| `badges`          | Yes      | ChatBadge[]  | Array of chat badges attached to the chat message           |
+| `isBroadcaster`   | Yes      | boolean      | Whether the author is the channel broadcaster               |
+| `isVip`           | Yes      | boolean      | Whether the author has VIP status                           |
+| `isModerator`     | Yes      | boolean      | Whether the author is a channel moderator                   |
+| `isSubscriber`    | Yes      | boolean      | Whether the author is subscribed to the channel             |
+| `platform`        | Yes      | string       | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object       | Raw event data from the original platform                   |
 
 **`ekg.event.deleted`** - Triggered when a chat message is deleted by a
 moderator or the platform.
@@ -297,6 +298,16 @@ Represents user mentions (e.g., @username).
 | `type`                 | Yes      | string | Always "mention"                       |
 | `mentionedId`          | Yes      | string | The ID of the mentioned user           |
 | `mentionedDisplayName` | Yes      | string | The display name of the mentioned user |
+
+### ChatBadge
+
+Represents a badge to be displayed next to a user's name in chat (e.g.,
+subscriber, moderator, broadcaster).
+
+| Property | Required | Type   | Description                                                                                                                    |
+| -------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `type`   | Yes      | string | Badge type: `"bits"`, `"bot"`, `"broadcaster"`, `"employee"`, `"moderator"`, `"partner"`, `"premium"`, `"subscriber"`, `"sub_gifter"`, or `"vip"` |
+| `url`    | Yes      | string | URL to the badge image                                                                                                         |
 
 ### Usage Recommendation
 
