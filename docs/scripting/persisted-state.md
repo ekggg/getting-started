@@ -67,7 +67,8 @@ EKG.widget("MyWidget")
 
 **`.persist(fn)`** takes your current state and returns an object containing
 only the data you want to save. You don't need to persist everything—just the
-important bits.
+important bits. Return only JSON-serializable data, since EKG.gg stores the
+persisted payload as JSON.
 
 **`.restore(fn)`** takes the initial state and whatever was previously
 persisted, then returns the restored state. The `persisted` argument may be
@@ -129,10 +130,14 @@ to its default when the widget reloads anyway.
 
 EKG.gg persists your widget's data in two situations:
 
-1. **Periodically** - Your data is saved at regular intervals while the widget
-   is running
-2. **Before page close** - When the browser tab or OBS scene is about to unload,
-   your data is saved one final time
+1. **Periodically** - Your data is saved every 15 seconds while the widget is
+   running
+2. **On teardown** - When the widget is being destroyed, such as during a page
+   close, browser source refresh, or scene switch, your data is saved one final
+   time
+
+Persisted state is limited to 5 KB after JSON serialization. If your persisted
+payload exceeds that limit, EKG.gg will log an error and skip saving it.
 
 This means there's a small window where very recent changes might not be
 persisted if something unexpected happens (like a browser crash). For most

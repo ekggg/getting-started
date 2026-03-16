@@ -25,6 +25,8 @@ real events but rather signals to your widget to update its state.
 | `ekg.subscription.gifted`  | A subscription gift event occurred.    |
 | `ekg.channel.followed`     | A user followed the channel.           |
 | `ekg.audience.transferred` | A raid/viewer transfer occurred.       |
+| `ekg.stream.started`       | The stream went live.                  |
+| `ekg.stream.ended`         | The stream ended.                      |
 | `ekg.poll.updated`         | A poll was created, updated, or ended. |
 | `RESIZE`                   | Widget dimensions changed.             |
 | `TICK`                     | Periodic maintenance signal fired.     |
@@ -37,19 +39,19 @@ real events but rather signals to your widget to update its state.
 is the most common event you'll work with and contains rich information about
 the author and message content.
 
-| Property          | Required | Type         | Description                                                 |
-| ----------------- | -------- | ------------ | ----------------------------------------------------------- |
-| `id`              | Yes      | string       | Unique identifier for this chat message                     |
-| `userId`          | Yes      | string       | Unique identifier for the message author                    |
-| `userDisplayName` | Yes      | string       | Display name of the message author                          |
-| `message`         | Yes      | ChatNode[]   | Array of rich-text nodes (text, emojis, mentions, links)    |
-| `badges`          | Yes      | ChatBadge[]  | Array of chat badges attached to the chat message           |
-| `isBroadcaster`   | Yes      | boolean      | Whether the author is the channel broadcaster               |
-| `isVip`           | Yes      | boolean      | Whether the author has VIP status                           |
-| `isModerator`     | Yes      | boolean      | Whether the author is a channel moderator                   |
-| `isSubscriber`    | Yes      | boolean      | Whether the author is subscribed to the channel             |
-| `platform`        | Yes      | string       | Platform where the event originated ("twitch" or "youtube") |
-| `raw`             | Yes      | object       | Raw event data from the original platform                   |
+| Property          | Required | Type        | Description                                                 |
+| ----------------- | -------- | ----------- | ----------------------------------------------------------- |
+| `id`              | Yes      | string      | Unique identifier for this chat message                     |
+| `userId`          | Yes      | string      | Unique identifier for the message author                    |
+| `userDisplayName` | Yes      | string      | Display name of the message author                          |
+| `message`         | Yes      | ChatNode[]  | Array of rich-text nodes (text, emojis, mentions, links)    |
+| `badges`          | Yes      | ChatBadge[] | Array of chat badges attached to the chat message           |
+| `isBroadcaster`   | Yes      | boolean     | Whether the author is the channel broadcaster               |
+| `isVip`           | Yes      | boolean     | Whether the author has VIP status                           |
+| `isModerator`     | Yes      | boolean     | Whether the author is a channel moderator                   |
+| `isSubscriber`    | Yes      | boolean     | Whether the author is subscribed to the channel             |
+| `platform`        | Yes      | string      | Platform where the event originated ("twitch" or "youtube") |
+| `raw`             | Yes      | object      | Raw event data from the original platform                   |
 
 **`ekg.event.deleted`** - Triggered when a chat message is deleted by a
 moderator or the platform.
@@ -172,6 +174,26 @@ _This event is currently emitted for Twitch only._
 | `platform`        | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
 | `raw`             | Yes      | object | Raw event data from the original platform                   |
 
+## Stream Events
+
+**`ekg.stream.started`** - Fired when the connected stream goes live.
+
+| Property    | Required | Type   | Description                                                 |
+| ----------- | -------- | ------ | ----------------------------------------------------------- |
+| `channelId` | Yes      | string | ID of the channel that started streaming                    |
+| `startedAt` | Yes      | number | Unix timestamp (milliseconds) when the stream started       |
+| `platform`  | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
+| `raw`       | Yes      | object | Raw event data from the original platform                   |
+
+**`ekg.stream.ended`** - Fired when the connected stream ends.
+
+| Property    | Required | Type   | Description                                                 |
+| ----------- | -------- | ------ | ----------------------------------------------------------- |
+| `channelId` | Yes      | string | ID of the channel that stopped streaming                    |
+| `endedAt`   | Yes      | number | Unix timestamp (milliseconds) when the stream ended         |
+| `platform`  | Yes      | string | Platform where the event originated ("twitch" or "youtube") |
+| `raw`       | Yes      | object | Raw event data from the original platform                   |
+
 ## Poll Events
 
 **`ekg.poll.updated`** - Fired when a poll is created, receives new votes, or
@@ -201,7 +223,8 @@ multiple events for the same poll as it progresses.
 In addition to platform events, EKG sends system events that help widgets manage
 their internal state and respond to changes in their environment.
 
-**`RESIZE`** - Fired when the widget's dimensions change.
+**`RESIZE`** - Fired when the widget's dimensions change. `RESIZE` has a
+top-level `timestamp`, but no `id`, `platform`, or `raw`.
 
 | Property | Required | Type   | Description                            |
 | -------- | -------- | ------ | -------------------------------------- |
@@ -210,7 +233,8 @@ their internal state and respond to changes in their environment.
 
 **`TICK`** - Fired periodically for cleanup and maintenance tasks.
 
-_The tick event has no properties_
+`TICK` only contains `type: "TICK"`. It has no `id`, `timestamp`, `data`,
+`platform`, or `raw`.
 
 ### Usage Examples
 
@@ -304,10 +328,10 @@ Represents user mentions (e.g., @username).
 Represents a badge to be displayed next to a user's name in chat (e.g.,
 subscriber, moderator, broadcaster).
 
-| Property | Required | Type   | Description                                                                                                                    |
-| -------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Property | Required | Type   | Description                                                                                                                                       |
+| -------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `type`   | Yes      | string | Badge type: `"bits"`, `"bot"`, `"broadcaster"`, `"employee"`, `"moderator"`, `"partner"`, `"premium"`, `"subscriber"`, `"sub_gifter"`, or `"vip"` |
-| `url`    | Yes      | string | URL to the badge image                                                                                                         |
+| `url`    | Yes      | string | URL to the badge image                                                                                                                            |
 
 ### Usage Recommendation
 

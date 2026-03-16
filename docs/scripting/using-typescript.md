@@ -9,7 +9,7 @@ for the entire EKG API.
 
 Widget development involves working with events, state, and context objects that
 all have specific shapes. When you're handling a `ChatSent` event, you need to
-know that it has an `authorDisplayName` property, not `username` or `sender`.
+know that it has a `userDisplayName` property, not `username` or `sender`.
 TypeScript catches these mistakes as you write code rather than when you're
 testing your widget live.
 
@@ -85,6 +85,10 @@ devkit based on your manifest.
 **`EKG.WidgetSettings`** - An interface for your widget's settings, populated by
 the devkit based on your manifest.
 
+**`EKG.InitialData`** - The second argument passed to `.initialState()`,
+containing the latest follower, subscriber, stream start, and tip events when
+they are available.
+
 ## Writing a typed widget
 
 Here's a complete example of a typed widget that displays recent followers:
@@ -104,7 +108,7 @@ EKG.widget("RecentFollowers")
     switch (event.type) {
       case "ekg.channel.followed":
         const newFollower = {
-          name: event.data.followerDisplayName,
+          name: event.data.userDisplayName,
           timestamp: event.timestamp,
         };
         return {
@@ -134,7 +138,7 @@ type:
     case "ekg.chat.sent":
       // TypeScript knows event is ChatSent here
       const message = event.data.message; // ChatNode[]
-      const author = event.data.authorDisplayName; // string
+      const author = event.data.userDisplayName; // string
       const isMod = event.data.isModerator; // boolean
       break;
 
@@ -198,6 +202,25 @@ autocomplete setting names as you type.
 
 See [List of EKG events](./list-of-events.md) for details on available event
 types and what data your widget will receive.
+
+## Working with initial data
+
+Your `.initialState()` callback receives `initialData` as its second argument:
+
+```ts
+.initialState((ctx, initialData) => ({
+  latestTip: initialData.latestTip
+    ? {
+        amount: initialData.latestTip.data.amountCents,
+        currency: initialData.latestTip.data.currency,
+      }
+    : null,
+}))
+```
+
+This is useful when your widget should start with the latest follower,
+subscriber, stream start, or tip that EKG has already seen before the widget was
+mounted.
 
 ## Utility functions
 

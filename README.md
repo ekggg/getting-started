@@ -75,6 +75,10 @@ appear in logs and error reporting in the browser.
 initial state will be used for the first render of the widget and for the
 subsequent `.register()` function call.
 
+The `initialData` argument lets you bootstrap from the latest events EKG.gg has
+already seen before your widget mounted. When available, it may contain
+`latestFollower`, `latestSubscriber`, `latestStreamStart`, and `latestTip`.
+
 **`.register(fn)`**: This is the most important part of any widget. This method
 takes a function `(event, state, ctx) => newState` that will be invoked any time
 something happens in the outside world that EKG.gg currently tracks. This could

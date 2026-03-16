@@ -218,8 +218,8 @@ The default value must be the name of one of the custom fonts, or the name of an
 EKG built-in font. The built-in fonts are currently sourced from
 [Fontsource](https://fontsource.org/).
 
-At runtime the selected value exposed in `ctx.settings` is the font family name
-to be used in CSS.
+At runtime the selected value exposed in `ctx.settings` is the `font-family`
+string to use in CSS.
 
 ## Image
 
@@ -252,6 +252,22 @@ Fields:
 - `default` audio filename (optional)
 
 At runtime the selected value exposed in `ctx.settings` is the audio URL.
+
+## Video
+
+```json
+{
+  "type": "video",
+  "name": "Intro Video",
+  "default": "intro.mp4"
+}
+```
+
+Fields:
+
+- `default` video filename (optional)
+
+At runtime the selected value exposed in `ctx.settings` is the video URL.
 
 ## Reward IDs
 

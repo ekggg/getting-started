@@ -5,7 +5,7 @@ files bundled with a widget version (not user-configurable settings).
 
 Each asset entry supports:
 
-- `type` (required): `image`, `audio`, or `font`
+- `type` (required): `image`, `audio`, `font`, or `video`
 - `file` (required): filename in your widget directory
 
 ## Runtime values (`ctx.assets`)
@@ -16,6 +16,7 @@ type:
 - `image` -> URL string
 - `audio` -> URL string
 - `font` -> `font-family` name string (not a file URL)
+- `video` -> URL string
 
 ## `image`
 
@@ -64,3 +65,19 @@ Runtime value:
 
 - `ctx.assets.displayFont` is a `font-family` value.
 - Use it directly in CSS, for example `font-family: {{ assets.displayFont }}`.
+
+## `video`
+
+```json
+{
+  "introClip": {
+    "type": "video",
+    "file": "intro.mp4"
+  }
+}
+```
+
+Runtime value:
+
+- `ctx.assets.introClip` is a URL you can use in
+  `<video src="{{ assets.introClip }}">`.
