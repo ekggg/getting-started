@@ -1,0 +1,32 @@
+:root {
+  --font-family: {{ settings.fontFamily }};
+  --font-size: {{ settings.fontSize }}px;
+  --font-weight: {{ settings.fontWeight }};
+  --font-color: {{ settings.fontColor }};
+  --outline-color: {{ settings.outlineColor }};
+  --outline-width: {{ settings.outlineWidth }}px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: transparent;
+
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  color: var(--font-color);
+  text-shadow:
+    0 0 var(--outline-width) var(--outline-color),
+    0 0 var(--outline-width) var(--outline-color),
+    0 0 var(--outline-width) var(--outline-color);
+}
