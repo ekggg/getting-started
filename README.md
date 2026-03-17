@@ -79,6 +79,13 @@ The `initialData` argument lets you bootstrap from the latest events EKG.gg has
 already seen before your widget mounted. When available, it may contain
 `latestFollower`, `latestSubscriber`, `latestStreamStart`, and `latestTip`.
 
+**`.persist(fn)`** and **`.restore(fn)`**: These two handlers let you save part
+of your widget's state across multiple scenes or streams. The persist function
+(`(state) => persistedState`) lets you choose what data needs to be saved. The
+restore function (`(state, persistedState) => newState`) controls how that saved
+data gets merged in to the existing state. Persisted state can be rather
+complicated, for more details please read our [persisted state guide][persist].
+
 **`.register(fn)`**: This is the most important part of any widget. This method
 takes a function `(event, state, ctx) => newState` that will be invoked any time
 something happens in the outside world that EKG.gg currently tracks. This could
@@ -107,6 +114,7 @@ and runtime. Read more about it [here][ctx].
 - [List of EKG events](./docs/scripting/list-of-events.md)
 - [`.register()` best practices](./docs/scripting/best-practices.md)
 - [Using the ctx object][ctx]
+- [Persisted State][persist]
 - [Dealing with time](./docs/scripting/dealing-with-time.md)
 - [Using TypeScript](./docs/scripting/using-typescript.md)
 - [Understanding the VM](./docs/scripting/understanding-the-vm.md)
@@ -336,9 +344,17 @@ EKG.widget("MyWidget")
 > _too_ many settings it can sometimes feel overwhelming for the streamer to
 > configure. Try to see if you can strike a nice middle ground.
 
+### Assets
+
+For image, video, audio or font files that don't need to be customized, you can
+declare them as assets. These function similarly to settings in that you can
+access them in your script, template or css. However it'll be under
+`ctx.assets.AssetName` or `{{assets.AssetName}}` rather than `settings`.
+
 ### Further reading
 
 - [List of setting types](./docs/settings/list-of-types.md)
+- [List of asset types](./docs/assets/list-of-types.md)
 
 ## Development - How to _not_ build in a vacuum
 
@@ -586,6 +602,7 @@ from others, preventing any cross-contamination of state or information.
 [chromium]: https://www.chromium.org/Home/
 [caniuse]: https://caniuse.com/
 [ctx]: ./docs/scripting/the-ctx-object.md
+[persist]: ./docs/scripting/persisted-state.md
 [evergreen]: https://nordvpn.com/cybersecurity/glossary/evergreen-browser/
 [exfiltrate]: https://en.wikipedia.org/wiki/Data_exfiltration
 [oklch]: https://jakub.kr/components/oklch-colors
