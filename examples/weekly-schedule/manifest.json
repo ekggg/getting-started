@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ekg.gg/schemas/manifest.json",
+  "type": "schedule",
+  "name": "Weekly Schedule",
+  "version": "1.0.0",
+  "description": "A cute square weekly stream schedule with a hero image",
+  "template": "template.hbs",
+  "css": "styles.css",
+  "js": "script.ts",
+  "settings": {
+    "displayFont": {
+      "type": "font",
+      "name": "Display Font",
+      "description": "Fancy font used for day numbers and the \"schedule\" wordmark",
+      "default": "Caveat"
+    },
+    "heroImage": {
+      "type": "image",
+      "name": "Hero Image",
+      "description": "Full-height character or artwork shown on the right"
+    },
+    "artistHandle": {
+      "type": "string",
+      "name": "Hero Image Artist",
+      "description": "Credit for the hero image artist (without the @)",
+      "default": ""
+    },
+    "primaryColor": {
+      "type": "color",
+      "name": "Primary Color",
+      "description": "Main background / card color",
+      "default": "#f7a8c9"
+    },
+    "accentColor": {
+      "type": "color",
+      "name": "Accent Color",
+      "description": "Used for highlights, stars, and dates",
+      "default": "#ffe8a3"
+    },
+    "twitterHandle": {
+      "type": "string",
+      "name": "Twitter / X Handle",
+      "description": "Your handle (without the @)",
+      "default": ""
+    },
+    "youtubeHandle": {
+      "type": "string",
+      "name": "YouTube Handle",
+      "description": "Your handle (without the @)",
+      "default": ""
+    },
+    "twitchHandle": {
+      "type": "string",
+      "name": "Twitch Handle",
+      "description": "Your handle (without the @)",
+      "default": ""
+    }
+  }
+}

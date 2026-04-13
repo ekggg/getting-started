@@ -74,14 +74,21 @@ debugging.
 formatting. Format options include "short", "medium", "long", and "full".
 Defaults to "short" format.
 
+Accepts either a Unix timestamp in milliseconds or a
+`{year, month, day}` object (as used by schedule widget `ScheduleData`).
+
 ```hbs
 {{formatDate createdAt "medium"}}
 ```
 
 _Input: `createdAt = 1724686200000` → Output: `Aug 26, 2024`_
 
+_Input: `createdAt = { year: 2024, month: 8, day: 26 }` → Output: `Aug 26, 2024`_
+
 **`{{formatTime date [format]}}`** - Formats times using internationalized
 formatting. Same format options as formatDate but focuses on time display.
+Accepts the same inputs as `formatDate` — either a millisecond timestamp or a
+`{year, month, day}` object.
 
 ```hbs
 {{formatTime messageTime "short"}}
@@ -89,8 +96,24 @@ formatting. Same format options as formatDate but focuses on time display.
 
 _Input: `messageTime = 1724686200000` → Output: `3:30 PM`_
 
+**`{{dayOfWeek date [format]}}`** - Formats the weekday of a date. Format
+options are "short" (e.g. "Mon"), "narrow" (e.g. "M"), and "long" (e.g.
+"Monday"). Defaults to "long".
+
+Accepts either a millisecond timestamp or a `{year, month, day}` object, which
+makes it a natural fit for rendering schedule widget days.
+
+```hbs
+{{dayOfWeek date "short"}}
+```
+
+_Input: `date = { year: 2024, month: 8, day: 26 }` → Output: `Mon`_
+
+_Input: `date = 1724686200000` → Output: `Monday`_
+
 **`{{formatAgo date [style]}}`** - Shows relative time (e.g., "2 hours ago").
-Style options are "short", "long", or "narrow".
+Style options are "short", "long", or "narrow". Accepts either a millisecond
+timestamp or a `{year, month, day}` object.
 
 ```hbs
 {{formatAgo messageTime "short"}}

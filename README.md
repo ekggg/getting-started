@@ -118,6 +118,7 @@ and runtime. Read more about it [here][ctx].
 - [Dealing with time](./docs/scripting/dealing-with-time.md)
 - [Using TypeScript](./docs/scripting/using-typescript.md)
 - [Understanding the VM](./docs/scripting/understanding-the-vm.md)
+- [Building schedule widgets](./docs/scripting/schedule-widgets.md)
 
 ## Markup - How state is rendered
 

@@ -1,0 +1,95 @@
+<div class="schedule">
+  <div class="sparkles" aria-hidden="true">
+    <span class="sparkle sparkle-1">✦</span>
+    <span class="sparkle sparkle-2">✦</span>
+    <span class="sparkle sparkle-3">✧</span>
+    <span class="sparkle sparkle-4">✦</span>
+    <span class="sparkle sparkle-5">✧</span>
+    <span class="sparkle sparkle-6">✦</span>
+  </div>
+
+  <div class="stack">
+    {{#each days}}
+      <div class="day {{#if isOff}}day-off{{/if}}">
+        <div class="day-label">
+          <span class="day-number">{{date.day}}</span>
+          <span class="day-name">{{dayOfWeek date "short"}}</span>
+        </div>
+        <div class="events {{#if isOff}}events-off{{/if}}">
+          {{#if isOff}}
+            <div class="event event-empty">
+              <span class="event-title">off</span>
+              <span class="event-sub">taking a break ♡</span>
+            </div>
+          {{else}}
+            {{#each events}}
+              <div class="event">
+                <div class="event-body">
+                  <span class="event-title">{{ title }}</span>
+                  {{#if subtitle}}<span class="event-sub">{{ subtitle }}</span>{{/if}}
+                </div>
+                <div class="event-time">
+                  <span class="time-star">★</span>
+                  <span class="time-text">{{formatTime time "short"}}</span>
+                </div>
+              </div>
+            {{/each}}
+          {{/if}}
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="hero">
+    {{#if settings.heroImage}}
+      <img class="hero-img" src="{{settings.heroImage}}" alt="" />
+    {{else}}
+      <div class="hero-img hero-placeholder">
+        <span class="placeholder-star">✦</span>
+        <span class="placeholder-text">upload a hero image</span>
+      </div>
+    {{/if}}
+
+    <div class="hero-top-flair">
+      <span class="flair-dot"></span>
+      <span class="flair-dot"></span>
+      <span class="flair-dot"></span>
+    </div>
+
+    {{#if settings.artistHandle}}
+      <div class="artist-credit">art by @{{settings.artistHandle}}</div>
+    {{/if}}
+
+    {{#if firstDate}}
+      <div class="week-range">
+        week of {{formatDate firstDate "medium"}} — {{formatDate lastDate "medium"}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="brand">
+    <span class="brand-title">schedule</span>
+    {{#if hasAnyHandle}}
+      <div class="handles">
+        {{#if settings.twitterHandle}}
+          <span class="handle">
+            <span class="handle-icon handle-icon-x">𝕏</span>
+            <span class="handle-name">{{settings.twitterHandle}}</span>
+          </span>
+        {{/if}}
+        {{#if settings.youtubeHandle}}
+          <span class="handle">
+            <span class="handle-icon handle-icon-yt">▶</span>
+            <span class="handle-name">{{settings.youtubeHandle}}</span>
+          </span>
+        {{/if}}
+        {{#if settings.twitchHandle}}
+          <span class="handle">
+            <span class="handle-icon handle-icon-tw">◆</span>
+            <span class="handle-name">{{settings.twitchHandle}}</span>
+          </span>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+</div>
