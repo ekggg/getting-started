@@ -77,8 +77,15 @@ Defaults to "short" format.
 Accepts either a Unix timestamp in milliseconds or a
 `{year, month, day}` object (as used by schedule widget `ScheduleData`).
 
+Optional hash options:
+
+- `hour12` (boolean) — force 12- or 24-hour time in locales where it applies
+- `timeZone` (IANA string, e.g. `"America/Los_Angeles"`) — render the date in
+  the given timezone rather than the viewer's local zone
+
 ```hbs
 {{formatDate createdAt "medium"}}
+{{formatDate createdAt "long" timeZone="America/New_York"}}
 ```
 
 _Input: `createdAt = 1724686200000` → Output: `Aug 26, 2024`_
@@ -90,8 +97,11 @@ formatting. Same format options as formatDate but focuses on time display.
 Accepts the same inputs as `formatDate` — either a millisecond timestamp or a
 `{year, month, day}` object.
 
+Supports the same `hour12` and `timeZone` hash options as `formatDate`.
+
 ```hbs
 {{formatTime messageTime "short"}}
+{{formatTime messageTime "short" hour12=false timeZone="Europe/London"}}
 ```
 
 _Input: `messageTime = 1724686200000` → Output: `3:30 PM`_
@@ -103,13 +113,74 @@ options are "short" (e.g. "Mon"), "narrow" (e.g. "M"), and "long" (e.g.
 Accepts either a millisecond timestamp or a `{year, month, day}` object, which
 makes it a natural fit for rendering schedule widget days.
 
+Supports the same `hour12` and `timeZone` hash options as `formatDate`
+(relevant when the input timestamp spans midnight in the target zone).
+
 ```hbs
 {{dayOfWeek date "short"}}
+{{dayOfWeek date "short" timeZone="Asia/Tokyo"}}
 ```
 
 _Input: `date = { year: 2024, month: 8, day: 26 }` → Output: `Mon`_
 
 _Input: `date = 1724686200000` → Output: `Monday`_
+
+**`{{formatDateTime date}}`** - Renders a combined date + time value with full
+access to [`Intl.DateTimeFormat`
+options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#options)
+through hash arguments.
+
+```hbs
+{{formatDateTime startsAt
+  year="numeric"
+  month="long"
+  day="numeric"
+  hour="2-digit"
+  minute="2-digit"
+  timeZoneName="short"
+  timeZone=settings.tz
+}}
+```
+
+Supported hash keys:
+
+- `dateStyle`, `timeStyle`: `"short" | "medium" | "long" | "full"`
+- `weekday`, `era`: `"narrow" | "short" | "long"`
+- `year`, `day`, `hour`, `minute`, `second`: `"numeric" | "2-digit"`
+- `month`: `"numeric" | "2-digit" | "narrow" | "short" | "long"`
+- `dayPeriod`: `"narrow" | "short" | "long"`
+- `fractionalSecondDigits`: `1 | 2 | 3`
+- `timeZoneName`:
+  `"short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"`
+- `hour12`: `true | false`
+- `timeZone`: IANA timezone string
+
+_Input: `startsAt = 1724686200000` with `timeZone="America/Los_Angeles"` →
+Output: `August 26, 2024 at 12:30 PM PDT`_
+
+**`{{formatTimezone timezone date [options]}}`** - Renders just the
+timezone-name portion of a date (not the date itself). Useful for labeling a
+time with its zone, e.g. "PDT" or "Pacific Daylight Time".
+
+Takes the IANA `timezone` as the first argument and the `date` as the second.
+Returns the empty string if the runtime can't produce a timezone name.
+
+Optional hash options:
+
+- `timeZoneName` (defaults to `"short"`):
+  `"short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"`
+
+```hbs
+{{formatDateTime startsAt timeZone=settings.tz}}
+({{formatTimezone settings.tz startsAt}})
+
+{{formatTimezone settings.tz startsAt timeZoneName="long"}}
+```
+
+_Input: `startsAt = 1724686200000`, `settings.tz = "America/Los_Angeles"` →
+Output: `PDT`_
+
+_With `timeZoneName="long"` → Output: `Pacific Daylight Time`_
 
 **`{{formatAgo date [style]}}`** - Shows relative time (e.g., "2 hours ago").
 Style options are "short", "long", or "narrow". Accepts either a millisecond

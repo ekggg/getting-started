@@ -285,3 +285,32 @@ Fields:
 
 At runtime the selected value exposed in `ctx.settings` is a `string[]` of
 reward IDs.
+
+## Timezone
+
+```json
+{
+  "type": "timezone",
+  "name": "Display Timezone",
+  "default": "America/Los_Angeles"
+}
+```
+
+Fields:
+
+- `default` IANA timezone string (optional, defaults to `""`)
+
+The UI presents a grouped, locale-aware dropdown (e.g. "Pacific Time", "Eastern
+Time"). Common aliases like `US/Eastern` or `Asia/Kolkata` are normalized to
+their canonical IANA names (`America/New_York`, `Asia/Calcutta`). The blank
+value (`""`) is available and means "no timezone selected" — useful when you
+want the widget to fall back to the viewer's local time.
+
+At runtime the selected value exposed in `ctx.settings` is the canonical IANA
+timezone string (or `""`). It's designed to be passed straight to the
+`timeZone=` hash of the datetime helpers or to `formatTimezone`:
+
+```hbs
+{{formatDate event.startsAt timeZone=settings.tz}}
+{{formatTimezone settings.tz event.startsAt}}
+```
