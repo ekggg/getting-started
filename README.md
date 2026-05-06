@@ -305,6 +305,10 @@ of how that setting can be configured. Each setting as a basic `"type"` field
 and an optional `"default"` field. Then based on the `"type"` field additional
 options can be applied.
 
+Settings can also include an optional `"group"` field. Settings with the same
+group label are shown together in a collapsible section when a streamer
+configures your widget.
+
 This list will then be presented to users when they go to add your widget to a
 scene of theirs for customization. The settings schema will limit the ways a
 user can input a setting, so you can rest assured your widget will never be
@@ -434,6 +438,10 @@ example.
 
 The manifest lists all of the files and settings the widget ultimately needs.
 Make sure you include any and all files your widget references.
+
+The optional top-level `"size"` field declares a fixed widget size in pixels.
+When present, streamers can move the widget in a scene but cannot resize it. We
+recommend avoiding this setting for most widgets.
 
 > [!WARNING]  
 > If you don't list an asset in your manifest file even if it's included in the
