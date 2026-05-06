@@ -55,6 +55,11 @@ opportunity to recalculate layouts or adjust content based on available space.
 This is particularly important for widgets that need to work well across
 different streaming setups and screen resolutions.
 
+If your manifest declares a fixed top-level `size`, streamers can move the
+widget but cannot resize it in the scene editor. In that case `ctx.size` still
+contains the rendered dimensions, but they come from the manifest rather than
+from the streamer's scene layout.
+
 ## Deterministic random numbers
 
 The `ctx.random()` function provides seeded pseudorandom numbers that are

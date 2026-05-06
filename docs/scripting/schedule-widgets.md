@@ -127,6 +127,9 @@ A few things worth knowing:
 - `time` is a millisecond Unix timestamp, not a `Date`. See
   [Dealing with time](./dealing-with-time.md) for why the VM has no `Date`
   global and how to format timestamps using template helpers.
+- Events may be manually entered by the streamer or imported from connected
+  Twitch/YouTube schedules. Your widget receives the same normalized shape
+  either way; import IDs and platform metadata are not exposed.
 - `events` may be empty for days with nothing scheduled. Your template should
   handle that case gracefully.
 - Days are always present, even if empty. You can render a seven-column grid
@@ -230,6 +233,9 @@ the right-hand panel is a **schedule editor** where you can:
 Every time you edit the schedule in the panel, the devkit re-invokes your
 `.register()` callback with the updated `ScheduleData`, so you get the same
 live-reload experience as an overlay widget.
+
+If the manifest declares a fixed `size`, EKG.gg uses that width and height for
+the schedule canvas instead of letting the streamer resize it.
 
 > [!TIP]  
 > Design your template to fill that canvas edge to edge and test a few

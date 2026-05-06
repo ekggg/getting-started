@@ -7,6 +7,7 @@ All setting entries support:
 - `type` (required)
 - `name` (required)
 - `description` (optional)
+- `group` (optional)
 
 Most settings also support an optional `default` field, whose type matches the
 setting type. You are highly encouraged to set a useful default so that your
@@ -16,6 +17,31 @@ Some settings support a `choices` field, which is an object mapping values to
 labels. This is used to provide a dropdown menu of choices for the user, and the
 value of the field is guaranteed to be one of the choices. The `default` value
 must also be one of the choices.
+
+## Grouping Settings
+
+Use the optional `group` field to organize related settings into collapsible
+sections in EKG.gg's configuration UI. Settings with the same group label are
+shown together under that label, and ungrouped settings stay at the top level.
+
+```json
+{
+  "settings": {
+    "textColor": {
+      "group": "Appearance",
+      "type": "color",
+      "name": "Text Color",
+      "default": "#ffffff"
+    },
+    "backgroundColor": {
+      "group": "Appearance",
+      "type": "color",
+      "name": "Background Color",
+      "default": "#000000b3"
+    }
+  }
+}
+```
 
 ## Runtime exposure
 
@@ -301,8 +327,8 @@ Fields:
 - `default` IANA timezone string (optional, defaults to `""`)
 
 The UI presents a grouped, locale-aware dropdown (e.g. "Pacific Time", "Eastern
-Time"). Common aliases like `US/Eastern` or `Asia/Kolkata` are normalized to
-their canonical IANA names (`America/New_York`, `Asia/Calcutta`). The blank
+Time"). Common aliases like `US/Eastern` or `Asia/Calcutta` are normalized to
+their canonical IANA names (`America/New_York`, `Asia/Kolkata`). The blank
 value (`""`) is available and means "no timezone selected" — useful when you
 want the widget to fall back to the viewer's local time.
 

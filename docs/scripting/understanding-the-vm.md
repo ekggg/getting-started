@@ -22,11 +22,12 @@ the broader EKG.gg platform.
 While the VM provides a secure environment, it still supports core ECMAScript
 features that widget developers need. You have access to standard ECMAScript
 data types, control structures, functions, objects, and arrays. Modern features
-like arrow functions, destructuring, template literals, and the spread operator
-all work as expected. The VM includes essential globals like `Math` (without the
-security-sensitive `Math.random()`), and `console` for logging. However,
-browser-specific APIs like `fetch`, `XMLHttpRequest`, `localStorage`, or DOM
-manipulation methods are intentionally unavailable.
+like arrow functions, destructuring, template literals, regular expressions,
+and the spread operator all work as expected. The VM includes essential globals
+like `Math` (without the security-sensitive `Math.random()`), `JSON`, `RegExp`,
+and `console` for logging. However, browser-specific APIs like `fetch`,
+`XMLHttpRequest`, `localStorage`, or DOM manipulation methods are intentionally
+unavailable.
 
 ## Seeded random numbers for consistency
 
