@@ -77,7 +77,9 @@ subsequent `.register()` function call.
 
 The `initialData` argument lets you bootstrap from the latest events EKG.gg has
 already seen before your widget mounted. When available, it may contain
-`latestFollower`, `latestSubscriber`, `latestStreamStart`, and `latestTip`.
+`latestFollower`, `latestSubscriber`, `latestStreamStart`, and `latestTip`. It
+also always includes an `activeGoals` array holding the channel's current goals,
+which is useful for [goal widgets](./docs/scripting/goal-widgets.md).
 
 **`.persist(fn)`** and **`.restore(fn)`**: These two handlers let you save part
 of your widget's state across multiple scenes or streams. The persist function
@@ -119,6 +121,7 @@ and runtime. Read more about it [here][ctx].
 - [Using TypeScript](./docs/scripting/using-typescript.md)
 - [Understanding the VM](./docs/scripting/understanding-the-vm.md)
 - [Building schedule widgets](./docs/scripting/schedule-widgets.md)
+- [Building goal widgets](./docs/scripting/goal-widgets.md)
 
 ## Markup - How state is rendered
 

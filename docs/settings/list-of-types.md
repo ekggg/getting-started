@@ -312,6 +312,32 @@ Fields:
 At runtime the selected value exposed in `ctx.settings` is a `string[]` of
 reward IDs.
 
+## Goal IDs
+
+```json
+{
+  "type": "goal_ids",
+  "name": "Tracked Goals",
+  "description": "Choose which goals this widget should display",
+  "max": 1
+}
+```
+
+Fields:
+
+- No `default` field
+- `max` integer limiting how many goals can be selected (optional; unlimited by
+  default)
+
+The configuration UI lists the channel's goals as checkboxes. Any archived goal
+that's still referenced by the widget's config stays selectable (marked
+"archived") so the streamer can swap it out.
+
+At runtime the selected value exposed in `ctx.settings` is a `string[]` of goal
+IDs. Match these against the `id` field of `ekg.goal.updated` events and the
+entries of `initialData.activeGoals`. See
+[Building goal widgets](../scripting/goal-widgets.md) for a full walkthrough.
+
 ## Timezone
 
 ```json

@@ -28,6 +28,7 @@ real events but rather signals to your widget to update its state.
 | `ekg.stream.started`       | The stream went live.                  |
 | `ekg.stream.ended`         | The stream ended.                      |
 | `ekg.poll.updated`         | A poll was created, updated, or ended. |
+| `ekg.goal.updated`         | A streamer goal changed or progressed. |
 | `RESIZE`                   | Widget dimensions changed.             |
 | `TICK`                     | Periodic maintenance signal fired.     |
 
@@ -215,6 +216,42 @@ multiple events for the same poll as it progresses.
 | -------- | -------- | ------ | ----------------------------------- |
 | `title`  | Yes      | string | The title/text of the poll option   |
 | `votes`  | Yes      | number | The number of votes for this option |
+
+## Goal Events
+
+**`ekg.goal.updated`** - Fired whenever a streamer goal changes. This covers the
+goal being created, edited, archived, unarchived, reset, and — most often —
+progressed as follows, subscriptions, or tips come in. Like polls, you'll
+receive this event many times for the same goal over its lifetime, so treat each
+one as the latest snapshot of that goal rather than a one-off occurrence.
+
+Goals originate from EKG.gg itself rather than a streaming platform, so
+`platform` is always `"ekg"` and `raw` is always an empty object.
+
+| Property   | Required | Type   | Description                                                                                                                                                    |
+| ---------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`       | Yes      | string | Unique identifier for the goal                                                                                                                                |
+| `type`     | Yes      | string | Goal type: `"new_followers"`, `"total_followers"`, `"new_subscribers"`, `"total_subscribers"`, `"new_subscriber_points"`, `"total_subscriber_points"`, or `"monetary"` |
+| `name`     | Yes      | string | The streamer-chosen name for the goal                                                                                                                         |
+| `status`   | Yes      | string | Goal status: `"active"` or `"archived"`                                                                                                                        |
+| `start`    | Yes      | number | The progress value the goal started counting from                                                                                                             |
+| `current`  | Yes      | number | The goal's current progress                                                                                                                                   |
+| `target`   | Yes      | number | The progress value that marks the goal complete                                                                                                               |
+| `currency` | No       | string | ISO currency code for `monetary` goals (e.g. `"USD"`); `null` for all other goal types                                                                        |
+| `platform` | Yes      | string | Always `"ekg"` for goal events                                                                                                                                |
+| `raw`      | Yes      | object | Always an empty object for goal events                                                                                                                        |
+
+> [!NOTE]  
+> For `monetary` goals, `start`, `current`, and `target` are expressed in the
+> **minor units** of `currency` (for example, cents for `USD`). Tips made in
+> other currencies are converted into the goal's currency before being added to
+> `current`.
+
+> [!NOTE]  
+> Goals never auto-complete. A goal stays `"active"` even after `current`
+> reaches (or exceeds) `target` — it only leaves the active set when the
+> streamer archives it. See [Building goal widgets](./goal-widgets.md) for how
+> to handle completion and removal in your widget.
 
 ---
 
